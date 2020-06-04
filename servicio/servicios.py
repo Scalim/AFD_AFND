@@ -2,8 +2,10 @@ from datetime import datetime
 from flask import jsonify
 from automatafinito import AutomataFinito
 
+
 def fecha_y_hora():
     return '--> '+str(datetime.now(tz=None).replace(microsecond=0))+': '
+
 
 def parsear_automata(automata):
     K = automata['K']  # (K) Nodos
@@ -17,14 +19,30 @@ def parsear_automata(automata):
         s.append(tupla)
     return AutomataFinito(E, K, S, F, s)
 
+
 def operar(json):
-    automata1 = parsear_automata(json['automatas'][0])
-    automata2 = parsear_automata(json['automatas'][1])
+    print("[servicios.py] operar()")
     operacion = json['operacion']
+    print("Operación: " + str(operacion))
+
+    if (operacion == "complemento"):
+        print("Autómata 1:")
+        automata1.mostrarQuintupla()
+        automata1 = parsear_automata(json['automatas'][0])
+    else:
+        print("Autómata 1:")
+        automata1.mostrarQuintupla()
+        print("Autómata 2:")
+        automata2.mostrarQuintupla()
+        automata1 = parsear_automata(json['automatas'][0])
+        automata2 = parsear_automata(json['automatas'][1])
 
     return jsonify(["uwu"])
 
 
 def simplificar(json):
+    print("[servicios.py] simplificar()")
     automata = parsear_automata(json['automata'])
+    print("Autómata:")
+    automata.mostrarQuintupla()
     return jsonify(["uwu"])
