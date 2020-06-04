@@ -45,7 +45,21 @@ class AutomataFinito:
         # Lógica de simplificación
 
     def union(automata1, automata2):
-        # Lógica de la unión
+        E = automata1.E.copy()
+        K = automata1.K.copy()
+        F = automata1.F.copy()
+        s = automata1.s.copy()
+
+        E + automata2.E
+        K + automata2.K
+        F + automata2.F
+        s + automata2.s
+
+        S = "Q0"
+        s.append(("Q0", None, automata1.S))
+        s.append(("Q0", None, automata2.S))
+
+        return AutomataFinito(E, K, S, F, s)
 
     def complemento(automata):
         if (not automata.esAfnd):
@@ -63,7 +77,16 @@ class AutomataFinito:
             raise Exception("El autómata debe ser AFD")
 
     def concatenacion(automata1, automata2):
-        # Lógica de la concatenación
+        E = automata1.E.copy() + automata2.E.copy()
+        K = automata1.K.copy() + automata2.K.copy()
+        F = automata2.F.copy()
+        s = automata1.s.copy() + automata2.s.copy()
+        S = automata1.S
+
+        for final in automata1.F:
+            s.append((final, None, automata2.S))
+
+        return AutomataFinito(E, K, S, F, s)
 
     def interseccion(automata1, automata2):
         # ~(~A1 U ~A2)
