@@ -1,30 +1,27 @@
-# Crear funciones acá 
+from datetime import datetime
+from flask import jsonify
 from automatafinito import AutomataFinito
 
-automata = {
-  "E": ["Q1", "Q2", "Q3"],
-  "K": ["a", "b"],
-  "S": "Q3",
-  "F": ["Q3"],
-  "s": [
-    {
-      "inicio": "Q1",
-      "letra": null,
-      "final": "Q2"
-    },
-    {
-      "inicio": "Q2",
-      "letra": "a",
-      "final": "Q2"
-    },
-    {
-      "inicio": "Q2",
-      "letra": "b",
-      "final": "Q3"
-    }
-  ]
-}
+def fecha_y_hora():
+    return '--> '+str(datetime.now(tz=None).replace(microsecond=0))+': '
 
-# Parsear autómata
 def parsear_automata(automata):
-    return AutomataFinito(automata['K'], automata['S'], automata['s'], automata['F'], )
+    E = automata['E']  # (Σ) Alfabeto
+    K = automata['K']  # (K) Nodos
+    S = automata['S']  # (S) Iniciales
+    F = automata['F']  # (F) Finales
+    s = []             # (δ) Conexiones
+
+    for conexion in automata['s']:
+        tupla = (conexion['inicio'], arista['letra'], arista['final'])
+        s.append(tupla)
+    return AutomataFinito(K, E, S, F, conexiones)
+
+def operar(json):
+    automata = parsear_automata(json['automatas'])
+    return jsonify(["uwu"])
+
+
+def simplificar(json):
+    automata = parsear_automata(json['automata'])
+    return jsonify(["uwu"])

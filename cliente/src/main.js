@@ -9,6 +9,7 @@ import VueSidebarMenu from 'vue-sidebar-menu';
 
 import "katex/dist/katex.min.css";
 import 'vue-sidebar-menu/dist/vue-sidebar-menu.css';
+import vuetify from './plugins/vuetify';
 
 Vue.config.productionTip = false;
 
@@ -23,5 +24,6 @@ Vue.prototype.$apiUrl = "http://localhost:5151";
 new Vue({
   router,
   store,
-  render: (h) => h(App),
+  vuetify,
+  render: (h) => h(App)
 }).$mount("#app");
