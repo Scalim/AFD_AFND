@@ -62,6 +62,8 @@ class AutomataFinito:
         s.append(("Q0", None, automata2.S))
 
         return AutomataFinito(E, K, S, F, s)
+        print("Unión entre dos autómatas")
+        # Lógica de la unión
 
     def complemento(automata):
         if (not automata.esAfnd):
