@@ -12,18 +12,27 @@
     >
       <b-step-item
         step="1"
-        label="Nodos"
+        label="Alfabeto"
         :clickable="false"
         class="is-full-h"
         style="border-bottom: 2px solid #f5f5f5; border-top: 2px solid #f5f5f5;"
       >
-        <nodos-input :nodos="nodos" />
+        <alfabeto-input></alfabeto-input>
+      </b-step-item>
+      <b-step-item
+        step="2"
+        label="Extremos"
+        :clickable="false"
+        class="is-full-h"
+        style="border-bottom: 2px solid #f5f5f5; border-top: 2px solid #f5f5f5;"
+      >
+        <extremos></extremos>
       </b-step-item>
 
       <b-step-item
-        step="2"
+        step="3"
         class="is-full-h"
-        label="Aristas"
+        label="Conexiones"
         style="border-bottom: 2px solid #f5f5f5; border-top: 2px solid #f5f5f5;"
         :clickable="false"
       >
@@ -50,7 +59,7 @@
             Atrás
           </b-button>
           <b-button
-            v-if="pasoActual != 1"
+            v-if="pasoActual != 2"
             outlined
             rounded
             type="is-primary"
@@ -77,25 +86,11 @@
   </section>
 </template>
 
-<style>
-.b-steps .steps,
-.b-steps .step-navigation {
-  padding: 10px;
-}
-
-.b-steps .step-navigation {
-  padding-left: 20px;
-  padding-right: 20px;
-}
-.step-content {
-  padding: 0 !important;
-  height: calc(100% - 65px - 56px);
-}
-</style>
-
 <script>
 import AristasInput from "./AristasInput.vue";
 import NodosInput from "./NodosInput.vue";
+import AlfabetoInput from "./AlfabetoInput";
+import Extremos from "./Extremos";
 
 export default {
   name: "StepperData",
@@ -103,6 +98,8 @@ export default {
   components: {
     AristasInput,
     NodosInput,
+    AlfabetoInput,
+    Extremos
   },
   data() {
     return {
@@ -110,6 +107,9 @@ export default {
       prevIcon: "chevron-left",
       nextIcon: "chevron-right",
     };
+  },
+  updated(){
+    // console.log("PASO", this.pasoActual);
   },
   computed: {
     sonNodosValidos() {
@@ -134,3 +134,19 @@ export default {
   },
 };
 </script>
+
+<style>
+.b-steps .steps,
+.b-steps .step-navigation {
+  padding: 10px;
+}
+
+.b-steps .step-navigation {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+.step-content {
+  padding: 0 !important;
+  height: calc(100% - 65px - 56px);
+}
+</style>

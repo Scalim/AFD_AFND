@@ -37,14 +37,18 @@
                 <template slot="empty">Sin resultados</template>
               </b-autocomplete>
             </b-field>
-            <b-field expanded style="margin-bottom: -12px;">
-              <b-numberinput
-                controls-position="compact"
-                controls-rounded
-                style="max-width: 200px"
-                min="0"
-                v-model="pesos[i]"
-              ></b-numberinput>
+            <b-field expanded style="margin-bottom: 5px;">
+              <b-autocomplete
+                rounded
+                :data="alfabeto"
+                keep-first
+                open-on-focus
+                field="etiqueta"
+                placeholder="Alfabeto"
+                clearable
+              >
+                <template slot="empty">Sin resultados</template>
+              </b-autocomplete>
             </b-field>
 
             <b-tooltip
@@ -107,6 +111,7 @@ export default {
   name: "AristasInput",
   props: ["nodos", "origenes", "destinos", "pesos"],
   data: () => ({
+    alfabeto: ['a', 'b'],
     config: {
       style: [
         {
