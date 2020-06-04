@@ -47,6 +47,7 @@ class AutomataFinito:
         # Lógica de simplificación
 
     def union(automata1, automata2):
+        print("Unión entre dos autómatas")
         # Lógica de la unión
 
     def complemento(automata):
