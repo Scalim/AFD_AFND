@@ -6,13 +6,13 @@ class AutomataFinito:
         self.F = F  # (F) Finales
         self.L = s  # (δ) Conexiones
 
-    def nodosString():
+    def nodosString(self):
         return "K = {" + ", ".join(self.K) + "}"
 
-    def alfabetoString():
+    def alfabetoString(self):
         return "Σ = {" + ", ".join(self.E) + "}"
 
-    def inicialesString():
+    def inicialesString(self):
         return "S = {" + ", ".join(self.S) + "}"
 
     def finalesString(self):
@@ -30,18 +30,20 @@ class AutomataFinito:
 
     def esAfnd(self):
         for conexion in self.s:
-            if (conexion[1] == None)
-            # Si la letra de esa arista es vacío
-            return True
+            if (conexion[1] == None):
+                # Si la letra de esa arista es vacío
+                return True
         return False
 
     def obtenerAfd(self):
         if (self.esAfnd()):
             # Lógica de conversión
+            print("uwu")
         else:
             return self
 
     def simplificarAfd(self):
+        print("Simplificar autómata")
         # Lógica de simplificación
 
     def union(automata1, automata2):
@@ -96,6 +98,7 @@ class AutomataFinito:
             raise Exception("Ambos autómatas deben ser AFD")
 
     def operar(self, operacion, automata):
+        print("Obtener autómata a partir de una operación")
         if (operacion == "complemento"):
             complemento(self, automata)
         elif (operacion == "interseccion"):

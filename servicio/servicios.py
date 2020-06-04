@@ -1,5 +1,9 @@
+from datetime import datetime
 from flask import jsonify
+from automatafinito import AutomataFinito
 
+def fecha_y_hora():
+    return '--> '+str(datetime.now(tz=None).replace(microsecond=0))+': '
 
 def parsear_automata(automata):
     K = automata['K']  # (K) Nodos
@@ -12,7 +16,6 @@ def parsear_automata(automata):
         tupla = (conexion['inicio'], arista['letra'], arista['final'])
         s.append(tupla)
     return AutomataFinito(E, K, S, F, s)
-
 
 def operar(json):
     automata1 = parsear_automata(json['automatas'][0])
