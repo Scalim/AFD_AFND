@@ -4,7 +4,7 @@ class AutomataFinito:
         self.K = K  # (K) Nodos
         self.S = S  # (S) Iniciales
         self.F = F  # (F) Finales
-        self.L = s  # (δ) Conexiones
+        self.s = s  # (δ) Conexiones
 
     def nodosString(self):
         return "K = {" + ", ".join(self.K) + "}"
@@ -46,7 +46,7 @@ class AutomataFinito:
         print("Simplificar autómata")
         # Lógica de simplificación
 
-    def union(automata1, automata2):
+    def union(self, automata1, automata2):
         E = automata1.E.copy()
         K = automata1.K.copy()
         F = automata1.F.copy()
@@ -61,13 +61,13 @@ class AutomataFinito:
         s.append(("Q0", None, automata1.S))
         s.append(("Q0", None, automata2.S))
 
-        return AutomataFinito(E, K, S, F, s)
         print("Unión entre dos autómatas")
         # Lógica de la unión
+        return AutomataFinito(E, K, S, F, s)
 
-    def complemento(automata):
+    def complemento(self, automata):
         if (not automata.esAfnd):
-            # Es una porpiedad sólo de AFD
+            # Es una propiedad sólo de AFD
             F = []
             K = automata.K.copy()
             KsinInicial = K.remove(automata.S)
@@ -76,11 +76,11 @@ class AutomataFinito:
                     # Si el nodo no está en los finales del autómata
                     F.append(nodo)
 
-            return AutomataFinito(automata.E, automata.K, automata.S, F, automata.s)
+            return AutomataFinito(automata.E, automata.K, automata.S, automata.F, automata.s)
         else:
             raise Exception("El autómata debe ser AFD")
 
-    def concatenacion(automata1, automata2):
+    def concatenacion(self, automata1, automata2):
         E = automata1.E.copy() + automata2.E.copy()
         K = automata1.K.copy() + automata2.K.copy()
         F = automata2.F.copy()
@@ -92,20 +92,20 @@ class AutomataFinito:
 
         return AutomataFinito(E, K, S, F, s)
 
-    def interseccion(automata1, automata2):
+    def interseccion(self, automata1, automata2):
         # ~(~A1 U ~A2)
         if (not automata1.esAfnd() and not automata2.esAfnd()):
-            return complemento(union(complemento(automata1), complemento(automata2)))
+            return self.complemento(self.union(self.complemento(automata1), self.complemento(automata2)))
         else:
             raise Exception("Ambos autómatas deben ser AFD")
 
-    def operar(self, operacion, automata):
+    def operar(self, operacion, automata1, automata2):
         print("Obtener autómata a partir de una operación")
         if (operacion == "complemento"):
-            complemento(self, automata)
+            self.complemento(automata1)
         elif (operacion == "interseccion"):
-            interseccion(self, automata)
+            self.interseccion(automata1, automata2)
         elif (operacion == "union"):
-            union(self, automata)
+            self.union(automata1, automata2)
         elif (operacion == "concatenacion"):
-            concatenacion(self, automata)
+            self.concatenacion(automata1, automata2)
