@@ -52,8 +52,12 @@ class AutomataFinito:
             j=0
             while(j<len(self.K)):
                 if(M[i][j]==0):
-                    reapuntar(self.K[j],self.K[i],D)
-                    borracion(self.K[i],I,A,D)
+                    if(self.K[i] in self.S):
+                        reapuntar(self.K[i],self.K[j],D)
+                        borracion(self.K[j],I,A,D)
+                    else:
+                        reapuntar(self.K[j],self.K[i],D)
+                        borracion(self.K[i],I,A,D)
                     M[i][j]=1
                     M[j][i]=1
                 j=j+1
@@ -176,7 +180,6 @@ def llenar_matrizC(nodos,alfabeto,conexiones):
         n=n+1
     return M
 def es_final(nodo,nodos,finales):
-    a=0
     for i in finales:
         if(i==nodos[nodo]):
             return True
