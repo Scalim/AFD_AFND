@@ -44,6 +44,23 @@ class AutomataFinito:
 
     def simplificarAfd(self):
         print("Simplificar autómata")
+        M=matriz_estados(self.E,self.K,self.F,self.s)
+        I,A,D=enlaces(self.s)
+        i=0
+        j=0
+        while(i<len(self.K)):
+            j=0
+            while(j<len(self.K)):
+                if(M[i][j]==0):
+                    reapuntar(self.K[j],self.K[i],D)
+                    borracion(self.K[i],I,A,D)
+                    M[i][j]=1
+                    M[j][i]=1
+                j=j+1
+            i=i+1
+        self.K=delete(I,self.K)
+        self.F=delete(I,self.F)
+        self.s=decod(I,A,D)
         # Lógica de simplificación
 
     def union(self, automata1, automata2):
@@ -109,3 +126,141 @@ class AutomataFinito:
             self.union(automata1, automata2)
         elif (operacion == "concatenacion"):
             self.concatenacion(automata1, automata2)
+
+def buscar_id(variable,lista):
+    cont =0
+    for i in lista:
+        if(i==variable):
+            return cont
+        cont=cont+1
+def matriz(alfabeto,nodos):
+    matriz=[]
+    cont=0
+    for i in alfabeto:
+        cont=cont+1
+    for i in nodos:
+        matriz.append([0]*cont)
+    return matriz
+def enlaces(conexiones):
+    nd_inic=[]
+    alf_con=[]
+    nd_dest=[]
+    for i in conexiones:
+        cont=0
+        ndIaux=""
+        alfCaux=""
+        ndDaux=""
+        for j in i:
+            if(j==','):
+                cont=cont+1
+            if(cont==0 and j!='('):
+                ndIaux = ndIaux + j
+            if(cont==1 and j==','):
+                nd_inic.append(ndIaux)
+            if(cont==1 and j!=','):
+                alfCaux = alfCaux + j
+            if(cont==2 and j==','):
+                alf_con.append(alfCaux)
+            if(cont==2 and j!=',' and j!=')'):
+                ndDaux = ndDaux + j
+            if(cont==2 and j==')'):
+                nd_dest.append(ndDaux)
+    return nd_inic,alf_con,nd_dest
+        
+def llenar_matrizC(nodos,alfabeto,conexiones):
+    M=matriz(alfabeto,nodos)
+    I,A,D=enlaces(conexiones)
+    n=0
+    while(n<len(I)):
+        M[buscar_id(I[n],nodos)][buscar_id(A[n],alfabeto)]=D[n]
+        n=n+1
+    return M
+def es_final(nodo,nodos,finales):
+    a=0
+    for i in finales:
+        if(i==nodos[nodo]):
+            return True
+    return False
+
+def matriz_estados(alfabeto,nodos,finales,conexiones):
+    C=llenar_matrizC(nodos,alfabeto,conexiones)
+    E=matriz(nodos,nodos)
+    i=0
+    j=0
+    while(i<len(nodos)):
+        j=0
+        while(j<len(nodos)):
+            
+            if(i==j):
+                E[i][j]=-1
+            j=j+1
+        i=i+1
+    i=0
+    j=0
+    while(i<len(nodos)):
+        j=0
+        while(j<len(nodos)):
+            val=False
+            if(j==i):
+                j=j+1
+                val=True
+            elif(E[i][j]==1):
+                j=j+1
+                val=True
+            elif(es_final(i,nodos,finales) and not(es_final(j,nodos,finales))):
+                E[i][j]=1
+                E[j][i]=1
+            else:
+                a=C[j][0]
+                b=C[i][0]
+                if(E[buscar_id(a,nodos)][buscar_id(b,nodos)] == 1):
+                    E[i][j]=1
+                    E[j][i]=1
+                else:
+                    a=C[j][1]
+                    b=C[i][1]
+                    if(E[buscar_id(a,nodos)][buscar_id(b,nodos)] == 1):
+                        E[i][j]=1
+                        E[j][i]=1
+            if(not val):
+                j=j+1
+        i=i+1
+    return E
+
+def reapuntar(mantener,borrar,destinos) :
+    indice=0
+    for i in destinos:
+        if(i==borrar):
+            destinos[indice]=mantener
+        indice=indice+1
+def borracion(borrar, partidas, caminos, destinos):
+    i=0
+    while(i<len(partidas)):
+        val=False
+        if(partidas[i]==borrar):
+            partidas.pop(i)
+            caminos.pop(i)
+            destinos.pop(i)
+            val=True
+        if(not val):
+            i=i+1
+
+def delete(partidas,nodos):
+    i=0
+    while(i<len(nodos)):
+        val=False
+        if(nodos[i] not in partidas):
+            nodos.pop(i)
+            val=True
+        if(not val):
+            i=i+1
+    return(nodos)
+    
+def decod(partidas,caminos,destinos):
+    lista=[]
+    i=0
+    while(i<len(partidas)):
+        aux="(" + partidas[i] + "," + caminos[i] + "," + destinos[i] + ")"
+        lista.append(aux)
+        i=i+1
+    return lista
