@@ -132,7 +132,7 @@ class AutomataFinito:
             self.concatenacion(automata1, automata2)
 
 def buscar_id(variable,lista):
-    cont =0
+    cont = 0
     for i in lista:
         if(i==variable):
             return cont
@@ -151,24 +151,16 @@ def enlaces(conexiones):
     nd_dest=[]
     for i in conexiones:
         cont=0
-        ndIaux=""
-        alfCaux=""
-        ndDaux=""
         for j in i:
-            if(j==','):
+            if(cont==2):
+                nd_dest.append(j)
                 cont=cont+1
-            if(cont==0 and j!='('):
-                ndIaux = ndIaux + j
-            if(cont==1 and j==','):
-                nd_inic.append(ndIaux)
-            if(cont==1 and j!=','):
-                alfCaux = alfCaux + j
-            if(cont==2 and j==','):
-                alf_con.append(alfCaux)
-            if(cont==2 and j!=',' and j!=')'):
-                ndDaux = ndDaux + j
-            if(cont==2 and j==')'):
-                nd_dest.append(ndDaux)
+            if(cont==1):
+                alf_con.append(j)
+                cont=cont+1
+            if(cont==0):
+                nd_inic.append(j)
+                cont=cont+1 
     return nd_inic,alf_con,nd_dest
         
 def llenar_matrizC(nodos,alfabeto,conexiones):
@@ -263,7 +255,7 @@ def decod(partidas,caminos,destinos):
     lista=[]
     i=0
     while(i<len(partidas)):
-        aux="(" + partidas[i] + "," + caminos[i] + "," + destinos[i] + ")"
-        lista.append(aux)
+        tupla=(partidas[i],caminos[i],destinos[i])
+        lista.append(tupla)
         i=i+1
     return lista
