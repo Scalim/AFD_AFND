@@ -259,3 +259,95 @@ def decod(partidas,caminos,destinos):
         lista.append(tupla)
         i=i+1
     return lista
+
+def matE_AFND(alfabeto,nodos):
+    matriz=[]
+    cont=0
+    for i in alfabeto:
+        cont=cont+1
+    for i in nodos:
+        matriz.append([0]*cont)
+    i=0
+    while(i<len(nodos)):
+        j=0
+        while(j<len(alfabeto)):
+            matriz[i][j]=[]
+            j=j+1
+        i=i+1
+    return matriz
+
+def conx_void(nodo,partidas,caminos):
+    i=0
+    cont=0
+    while(i<len(partidas)):
+        if(partidas[i]==nodo):
+            if(caminos[i]==""):
+                return True
+        i=i+1
+    return False
+
+def caminos_void(nodo,partidas,caminos,destinos):
+    i=0
+    lista=[]
+    while(i<len(partidas)):
+        if(partidas[i]==nodo and caminos[i]=="" ):
+            lista.append(destinos[i])
+        i=i+1
+    return lista
+        
+def buscar_destino(nodo,camino,partidas,caminos,destinos):
+    i=0
+    while(i<len(partidas)):
+        if(partidas[i]==nodo and caminos[i]==camino):
+            return destinos[i]
+        i=i+1
+    return "sumidero"
+
+def buscar_conxVoid(nodo,camino,partidas,caminos,destinos):
+    cant=0
+    V=caminos_void(nodo,partidas,caminos,destinos)
+    cantidadV=len(V)
+    estacosa=""
+    while(cant<cantidadV):
+        estacosa = estacosa + "|" + buscar_destino(V[cant],camino,partidas,caminos,destinos)+"|"
+        if(conx_void(V[cant],partidas,caminos)):
+            estacosa = estacosa + "|" + buscar_conxVoid(V[cant],camino,partidas,caminos,destinos) + "|"
+        cant = cant + 1
+    return estacosa
+def dest_to_list(estacosa):
+    i=0
+    lista=[]
+    aux=""
+    mod=False
+    while(i<len(estacosa)):
+        val=False
+        if(estacosa[i]!="|"):
+            aux=aux+estacosa[i]
+            mod=True
+        if(estacosa[i]=="|" and mod):
+            mod=False
+            lista.append(aux)
+            aux=""
+        i=i+1
+    return lista
+def llenar_matCAFND(nodos,alfabeto,conexiones):
+    M=matE_AFND(alfabeto,nodos)
+    I,A,D=enlaces(conexiones)
+    n=0
+    while(n<len(I)):
+        if(A[n]!=""):
+            M[buscar_id(I[n],nodos)][buscar_id(A[n],alfabeto)].append(D[n])
+        if(conx_void(D[n],I,A)):
+            aux=caminos_void(D[n],I,A,D)
+            for i in aux:
+                M[buscar_id(I[n],nodos)][buscar_id(A[n],alfabeto)].append(i)
+        if(A[n]==""):
+            letra=0
+            while(letra<len(alfabeto)):
+                aux=dest_to_list(buscar_conxVoid(I[n],alfabeto[letra],I,A,D))
+                for i in aux:
+                    M[buscar_id(I[n],nodos)][buscar_id(alfabeto[letra],alfabeto)].append(i)
+                letra=letra+1
+        
+        n=n+1
+    return M
