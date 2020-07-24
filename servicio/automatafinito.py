@@ -1,3 +1,4 @@
+from collections import OrderedDict
 class AutomataFinito:
     def __init__(self, E, K, S, F, s):
         self.E = E  # (Σ) Alfabeto
@@ -36,11 +37,13 @@ class AutomataFinito:
         return False
 
     def obtenerAfd(self):
-        if (self.esAfnd()):
+        nodos,inicio,finales,conexiones = transformacion(self.E,self.K,self.S,self.F,self.s)
+        self.K=nodos
+        self.S=inicio
+        self.F=finales
+        self.s=conexiones  
             # Lógica de conversión
-            print("uwu")
-        else:
-            return self
+
 
     def simplificarAfd(self):
         print("Simplificar autómata")
@@ -320,7 +323,6 @@ def dest_to_list(estacosa):
     aux=""
     mod=False
     while(i<len(estacosa)):
-        val=False
         if(estacosa[i]!="|"):
             aux=aux+estacosa[i]
             mod=True
@@ -350,4 +352,94 @@ def llenar_matCAFND(nodos,alfabeto,conexiones):
                 letra=letra+1
         
         n=n+1
+    i=0
+    while(i<len(nodos)):
+        j=0
+        while(j<len(alfabeto)):
+            M[i][j]=list(OrderedDict.fromkeys(M[i][j]))
+            j+=1
+        i+=1
     return M
+
+def unionNodos(unir):
+    aux=""
+    for i in unir:
+        aux+=i
+    return aux
+
+def separar(nodo,nodos):
+    aux=""
+    lista=[]
+    i=0
+    while(i <len(nodo)):
+        aux+=nodo[i]
+        if(aux in nodos):
+            lista.append(aux)
+            aux=""
+        i+=1
+    return lista
+
+def cant_destinos(id_nodo,matriz,camino):
+    return len(matriz[id_nodo][camino])
+
+def transformacion(alfabeto,nodos,iniciales,finales,conexiones):
+    M=llenar_matCAFND(nodos,alfabeto,conexiones)
+    P,C,D=enlaces(conexiones)
+    nodosAFD=[]
+    inicialAFD=[]
+    finalesAFD=[]
+    conexionesAFD=[]
+    Pafd=[]
+    Cafd=[]
+    Dafd=[]
+    inicialAFD.append(unionNodos(iniciales))
+    nodosAFD.append(unionNodos(iniciales))
+    i=0
+    while(i<len(nodos)):
+        j=0
+        while(j<len(alfabeto)):
+            if((unionNodos(M[i][j]) not in nodosAFD) and (unionNodos(M[i][j])!= "")):
+                nodosAFD.append(unionNodos(M[i][j]))
+            j+=1
+        i+=1
+    i=0
+    while(i<len(nodosAFD)):
+        L=separar(nodosAFD[i],nodos)
+        abc=0
+        while(abc<len(alfabeto)):
+            aux=""
+            val=False
+            Laux=[]
+            Void=[]
+            for j in L:
+                if(conx_void(buscar_destino(j,alfabeto[abc],P,C,D),P,C)):
+                    Void=caminos_void(buscar_destino(j,alfabeto[abc],P,C,D),P,C,D)
+                    for k in Void:
+                        Laux.append(k)
+                if(buscar_destino(j,alfabeto[abc],P,C,D)!="sumidero"):
+                    Laux.append(buscar_destino(j,alfabeto[abc],P,C,D))
+            Laux=sorted(Laux)
+            Laux=list(OrderedDict.fromkeys(Laux))
+            for k in Laux:
+                aux+=k
+            Pafd.append(nodosAFD[i])
+            Cafd.append(alfabeto[abc])
+            if(aux == ""):
+                Dafd.append("sumidero")
+            else:
+                Dafd.append(aux)
+            if((aux not in nodosAFD) and aux != ""):
+                nodosAFD.append(aux)
+            abc+=1
+        i+=1
+    i=0
+    while(i<len(nodosAFD)):
+        L=separar(nodosAFD[i],nodos)
+        for j in L:
+            if(j in finales):
+                finalesAFD.append(nodosAFD[i])
+        i+=1
+    finalesAFD=list(OrderedDict.fromkeys(finalesAFD))
+    conexionesAFD=decod(Pafd,Cafd,Dafd)
+    return nodosAFD,inicialAFD,finalesAFD,conexionesAFD
+    
