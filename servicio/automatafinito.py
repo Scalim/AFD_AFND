@@ -382,7 +382,49 @@ def separar(nodo,nodos):
 def cant_destinos(id_nodo,matriz,camino):
     return len(matriz[id_nodo][camino])
 
+def separar_caminos(conexion,nodos,guia,conexiones):
+    Nnodos=[]
+    auxP=[]
+    auxC=[]
+    auxD=[]
+    auxP.append(conexion[0])
+    i=0
+    while(i<len(conexion[1])-1):
+        auxC.append(conexion[1][i])
+        auxD.append("zz00"+str(guia))
+        if(("zz00"+str(guia)) not in Nnodos):
+            Nnodos.append("zz00"+str(guia))
+        auxP.append("zz00"+str(guia))
+        guia+=1
+        i+=1
+    auxC.append(conexion[1][i])
+    auxD.append(conexion[2])
+    Laux=[]
+    ConxAUX=decod(auxP,auxC,auxD)
+    i=0
+    while(i<len(conexiones)):
+        if(conexiones[i]==conexion):
+            j=i+1
+            while(j<len(conexiones)):
+                Laux.append(conexiones[j])
+                j+=1
+            while(i<len(conexiones)):
+                conexiones.pop()
+        i+=1
+    for i in ConxAUX:
+        conexiones.append(i)
+    for i in Laux:
+        conexiones.append(i)
+    for i in Nnodos:
+        nodos.append(i)
+
 def transformacion(alfabeto,nodos,iniciales,finales,conexiones):
+    i=0
+    guia=1
+    while(i<len(conexiones)):
+        if(len(conexiones[i][1])>1):
+            separar_caminos(conexiones[i],nodos,guia,conexiones)
+        i+=1
     M=llenar_matCAFND(nodos,alfabeto,conexiones)
     P,C,D=enlaces(conexiones)
     nodosAFD=[]
