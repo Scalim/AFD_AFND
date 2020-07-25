@@ -21,44 +21,18 @@
 <script>
 export default {
   name: "Grafo",
-  // props: {
-  //   nodos: Array,
-  //   origenes: Array,
-  //   destinos: Array,
-  //   pesos: Array,
-  //   config: {
-  //     type: Object,
-  //     default: {
-  //       style: [
-  //         {
-  //           selector: "node",
-  //           style: {
-  //             "background-color": "#7958d5",
-  //             label: "data(id)",
-  //           },
-  //         },
-  //         {
-  //           selector: "edge",
-  //           style: {
-  //             label: "data(weight)",
-  //             width: 3,
-  //             "curve-style": "bezier",
-  //             "line-color": "#ccc",
-  //             "target-arrow-color": "#ccc",
-  //             "target-arrow-shape": "triangle",
-  //           },
-  //         },
-  //       ],
-  //       layout: { name: "circle", row: 1 },
-  //     },
-  //   },
-  // },
+  props: {
+    nodos: Array,
+    origenes: Array,
+    destinos: Array,
+    pesos: Array
+  },
   data() {
     return {
-      nodos: [],
-      origenes: [],
-      destinos: [],
-      pesos: [],
+      // nodos: [],
+      // origenes: [],
+      // destinos: [],
+      // pesos: [],
       config: {
         type: Object,
         layout: { name: "circle", row: 1 },
@@ -108,20 +82,20 @@ export default {
     };
   },
   mounted() {
-    this.nodos = [
-      { id: 1, etiqueta: "A", inicial: true, final: false },
-      { id: 2, etiqueta: "B" , inicial: false, final: true},
-      { id: 3, etiqueta: "C" , inicial: false, final: false},
-      { id: 4, etiqueta: "D" , inicial: true, final: true}
-    ];
-    this.origenes = ["A"];
-    this.destinos = ["B"];
-    this.pesos = ["0"];
+    // this.nodos = [
+    //   { id: 1, etiqueta: "A", inicial: true, final: false },
+    //   { id: 2, etiqueta: "B" , inicial: false, final: true},
+    //   { id: 3, etiqueta: "C" , inicial: false, final: false},
+    //   { id: 4, etiqueta: "D" , inicial: true, final: true}
+    // ];
+    // this.origenes = ["A"];
+    // this.destinos = ["B"];
+    // this.pesos = ["0"];
   },
   watch: {
     elementos() {
       this.$nextTick(async () => {
-        const cy = this.$refs.cy.instance;
+        const cy = await this.$refs.cy.instance;
         await this.afterCreated(cy);
       });
     }
@@ -165,7 +139,8 @@ export default {
   methods: {
     async afterCreated(cy) {
       await cy;
-      cy.layout({ name: "circle", row: 1 }).run();
+      cy.layout(this.config.layout).run();
+      cy.style(this.config.style).update();
     }
   }
 };

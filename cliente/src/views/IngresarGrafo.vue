@@ -12,6 +12,7 @@
               :origenes="origenes"
               :destinos="destinos"
               :pesos="pesos"
+              :alfabeto="alfabeto"
               :onFinalizar="onFinalizar"
             />
           </div>
@@ -38,7 +39,7 @@ import Grafo from "../components/Grafo.vue";
 
 export default {
   name: "Main",
-  props: ["onFinalizar", "grafoSeleccionado"],
+  props: ["onGuardar", "grafoSeleccionado"],
   components: {
     Stepper,
     Grafo,
@@ -48,28 +49,45 @@ export default {
     origenes: [],
     destinos: [],
     pesos: [],
+    alfabeto: []
   }),
   mounted() {
     if(this.grafoSeleccionado == 1){
-      this.nodos = this.$store.state.nodos;
-      this.origenes = this.$store.state.origenes;
-      this.destinos = this.$store.state.destinos;
-      this.pesos = this.$store.state.pesos;
-    } else if(this.grafoSeleccionado == 2){
-      this.nodos = this.$store.state.nodos;
-      this.origenes = this.$store.state.origenes;
-      this.destinos = this.$store.state.destinos;
-      this.pesos = this.$store.state.pesos;
+      this.nodos = this.$store.state.nodosUno;
+      this.origenes = this.$store.state.origenesUno;
+      this.destinos = this.$store.state.destinosUno;
+      this.pesos = this.$store.state.pesosUno;
+      this.alfabeto = this.$store.state.alfabetoUno;
+    }
+    if(this.grafoSeleccionado == 2){
+      this.nodos = this.$store.state.nodosDos;
+      this.origenes = this.$store.state.origenesDos;
+      this.destinos = this.$store.state.destinosDos;
+      this.pesos = this.$store.state.pesosDos;
+      this.alfabeto = this.$store.state.alfabetoDos;
     }
   },
   methods: {
     onFinalizar() {
-      this.$store.commit("crearGrafo", {
-        nodos: this.nodos,
-        origenes: this.origenes,
-        destinos: this.destinos,
-        pesos: this.pesos,
-      });
+      if(this.grafoSeleccionado == 1){
+        this.$store.commit("crearAutomataUno", {
+          nodos: this.nodos,
+          origenes: this.origenes,
+          destinos: this.destinos,
+          pesos: this.pesos,
+          alfabeto: this.alfabeto
+        });
+      }
+      if(this.grafoSeleccionado == 2){
+        this.$store.commit("crearAutomataDos", {
+          nodos: this.nodos,
+          origenes: this.origenes,
+          destinos: this.destinos,
+          pesos: this.pesos,
+          alfabeto: this.alfabeto
+        });
+      }
+      this.onGuardar();
     },
   },
 };

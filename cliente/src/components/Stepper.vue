@@ -17,7 +17,7 @@
         class="is-full-h"
         style="border-bottom: 2px solid #f5f5f5; border-top: 2px solid #f5f5f5;"
       >
-        <alfabeto-input></alfabeto-input>
+        <alfabeto :alfabeto="alfabeto" :nodos="nodos"></alfabeto>
       </b-step-item>
       <b-step-item
         step="2"
@@ -26,7 +26,7 @@
         class="is-full-h"
         style="border-bottom: 2px solid #f5f5f5; border-top: 2px solid #f5f5f5;"
       >
-        <extremos></extremos>
+        <extremos :nodos="nodos"></extremos>
       </b-step-item>
 
       <b-step-item
@@ -36,12 +36,7 @@
         style="border-bottom: 2px solid #f5f5f5; border-top: 2px solid #f5f5f5;"
         :clickable="false"
       >
-        <aristas-input
-          :nodos="nodos"
-          :origenes="origenes"
-          :destinos="destinos"
-          :pesos="pesos"
-        />
+        <aristas-input :nodos="nodos" :origenes="origenes" :destinos="destinos" :pesos="pesos" />
       </b-step-item>
       <template slot="navigation" slot-scope="{ previous, next }">
         <div
@@ -55,9 +50,7 @@
             icon-left="backward"
             :disabled="previous.disabled"
             @click.prevent="previous.action"
-          >
-            Atrás
-          </b-button>
+          >Atrás</b-button>
           <b-button
             v-if="pasoActual != 2"
             outlined
@@ -65,21 +58,18 @@
             type="is-primary"
             icon-pack="fas"
             icon-right="forward"
-            :disabled="next.disabled || (pasoActual == 0 && !sonNodosValidos)"
+            :disabled="next.disabled || pasoActual == 0 && (!alfabeto.length || !nodos.length)"
             @click.prevent="next.action"
-          >
-            Siguiente
-          </b-button>
+          >Siguiente</b-button>
           <b-button
             v-else
             rounded
             type="is-primary"
             icon-pack="fas"
             icon-right="forward"
+            :disabled="!sonNodosValidos"
             @click="onFinalizar"
-          >
-            Finalizar
-          </b-button>
+          >Finalizar</b-button>
         </div>
       </template>
     </b-steps>
@@ -89,31 +79,33 @@
 <script>
 import AristasInput from "./AristasInput.vue";
 import NodosInput from "./NodosInput.vue";
-import AlfabetoInput from "./AlfabetoInput";
 import Extremos from "./Extremos";
+import Alfabeto from "./Alfabeto";
 
 export default {
   name: "StepperData",
-  props: ["nodos", "origenes", "destinos", "pesos", "onFinalizar"],
+  props: ["nodos", "origenes", "destinos", "pesos", "alfabeto", "onFinalizar"],
   components: {
     AristasInput,
     NodosInput,
-    AlfabetoInput,
-    Extremos
+    Extremos,
+    Alfabeto
   },
   data() {
     return {
       pasoActual: 0,
       prevIcon: "chevron-left",
-      nextIcon: "chevron-right",
+      nextIcon: "chevron-right"
     };
   },
-  updated(){
-    // console.log("PASO", this.pasoActual);
+  methods: {},
+  watch: {
+  },
+  mounted(){
   },
   computed: {
     sonNodosValidos() {
-      if (!this.nodos || !this.nodos.length) {
+      if (this.pasoActual == 1 && (!this.nodos || !this.nodos.length)) {
         return false;
       }
 
@@ -121,17 +113,14 @@ export default {
         if (!nodo.etiqueta || nodo.etiqueta == "") {
           return false;
         } else {
-          if (
-            this.nodos.filter((n) => n.etiqueta == nodo.etiqueta).length > 1
-          ) {
+          if (this.nodos.filter(n => n.etiqueta == nodo.etiqueta).length > 1) {
             return false;
           }
         }
       }
-
       return true;
-    },
-  },
+    }
+  }
 };
 </script>
 

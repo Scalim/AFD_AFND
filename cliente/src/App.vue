@@ -11,7 +11,7 @@
       aria-role="dialog"
       aria-modal
     >
-      <ingresar-grafo :onGuardar="onFinalizar" :grafoSeleccionado="grafoSeleccionado"/>
+      <ingresar-grafo :onGuardar="onGuardar" :grafoSeleccionado="grafoSeleccionado"/>
     </b-modal>
     <div style="padding: 30px; width: calc(100% - 50px); float: right">
       <div style="display: flex; justify-content: space-between;">
@@ -96,7 +96,7 @@ export default {
       this.grafoSeleccionado = grafoSeleccionado;
       this.editarGrafoModal = true;
     },
-    onFinalizar() {
+    onGuardar() {
       this.editarGrafoModal = false;
       this.$buefy.toast.open({
         message: "El grafo se actualizó correctamente",
