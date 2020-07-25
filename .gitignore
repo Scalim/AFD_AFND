@@ -1,3 +1,5 @@
 venv
 servicio/__pycache__
+servicio/.scannerwork
+.scannerwork
 .vscode
