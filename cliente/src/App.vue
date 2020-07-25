@@ -11,7 +11,7 @@
       aria-role="dialog"
       aria-modal
     >
-      <ingresar-grafo :onGuardar="onFinalizar" />
+      <ingresar-grafo :onGuardar="onFinalizar" :grafoSeleccionado="grafoSeleccionado"/>
     </b-modal>
     <div style="padding: 30px; width: calc(100% - 50px); float: right">
       <div style="display: flex; justify-content: space-between;">
@@ -23,7 +23,7 @@
           icon-left="pencil"
           style="margin-bottom: 20px; margin-right: 20px;"
           size="is-medium"
-          @click="editarGrafoModal = true"
+          @click="seleccionGrafo(1)"
           >AFND 1</b-button
         >
         <b-button
@@ -33,7 +33,7 @@
           icon-left="pencil"
           style="margin-bottom: 20px;"
           size="is-medium"
-          @click="editarGrafoModal = true"
+          @click="seleccionGrafo(2)"
           >AFND 2</b-button
         >
         </div>
@@ -68,6 +68,7 @@ export default {
   data() {
     return {
       editarGrafoModal: false,
+      grafoSeleccionado: null,
       menu: [
         {
           href: "/",
@@ -91,6 +92,10 @@ export default {
     };
   },
   methods: {
+    seleccionGrafo(grafoSeleccionado){
+      this.grafoSeleccionado = grafoSeleccionado;
+      this.editarGrafoModal = true;
+    },
     onFinalizar() {
       this.editarGrafoModal = false;
       this.$buefy.toast.open({

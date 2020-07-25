@@ -38,7 +38,7 @@ import Grafo from "../components/Grafo.vue";
 
 export default {
   name: "Operar",
-  props: ["onFinalizar"],
+  // props: ["onFinalizar"],
   components: {
     Stepper,
     Grafo,

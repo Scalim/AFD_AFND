@@ -38,7 +38,7 @@ import Grafo from "../components/Grafo.vue";
 
 export default {
   name: "Main",
-  props: ["onFinalizar"],
+  props: ["onFinalizar", "grafoSeleccionado"],
   components: {
     Stepper,
     Grafo,
@@ -50,10 +50,17 @@ export default {
     pesos: [],
   }),
   mounted() {
-    this.nodos = this.$store.state.nodos;
-    this.origenes = this.$store.state.origenes;
-    this.destinos = this.$store.state.destinos;
-    this.pesos = this.$store.state.pesos;
+    if(this.grafoSeleccionado == 1){
+      this.nodos = this.$store.state.nodos;
+      this.origenes = this.$store.state.origenes;
+      this.destinos = this.$store.state.destinos;
+      this.pesos = this.$store.state.pesos;
+    } else if(this.grafoSeleccionado == 2){
+      this.nodos = this.$store.state.nodos;
+      this.origenes = this.$store.state.origenes;
+      this.destinos = this.$store.state.destinos;
+      this.pesos = this.$store.state.pesos;
+    }
   },
   methods: {
     onFinalizar() {
