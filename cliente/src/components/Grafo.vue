@@ -1,6 +1,16 @@
 <template>
-  <cytoscape ref="cy" :config="config" :afterCreated="afterCreated" style="height: 100%;">
-    <cy-element v-for="def in elementos" :key="`${def.data.id}`" sync :definition="def" />
+  <cytoscape
+    ref="cy"
+    :config="config"
+    :afterCreated="afterCreated"
+    style="height: 100%;"
+  >
+    <cy-element
+      v-for="def in elementos"
+      :key="`${def.data.id}`"
+      sync
+      :definition="def"
+    />
   </cytoscape>
 </template>
 
@@ -25,7 +35,9 @@ export default {
     nodos: Array,
     origenes: Array,
     destinos: Array,
-    pesos: Array
+    conexiones: Array,
+    iniciales: Array,
+    finales: Array,
   },
   data() {
     return {
@@ -41,30 +53,29 @@ export default {
             selector: "node",
             css: {
               label: "data(etiqueta)",
-            }
+            },
           },
           {
             selector: ".inicial",
             css: {
-              "shape": "triangle",
-            }
+              shape: "triangle",
+            },
           },
           {
             selector: ".noInicial",
-            css: {
-            }
+            css: {},
           },
           {
             selector: ".final",
             css: {
               "background-color": "#58d5b2",
-            }
+            },
           },
           {
             selector: ".noFinal",
             css: {
               "background-color": "#c458d5",
-            }
+            },
           },
           {
             selector: "edge",
@@ -74,11 +85,11 @@ export default {
               "curve-style": "bezier",
               "line-color": "#ccc",
               "target-arrow-color": "#ccc",
-              "target-arrow-shape": "triangle"
-            }
-          }
+              "target-arrow-shape": "triangle",
+            },
+          },
         ],
-      }
+      },
     };
   },
   mounted() {
@@ -93,55 +104,67 @@ export default {
     // this.pesos = ["0"];
   },
   watch: {
-    elementos() {
+    iniciales() {
       this.$nextTick(async () => {
         const cy = await this.$refs.cy.instance;
         await this.afterCreated(cy);
       });
-    }
+    },
+    elementos() {
+      this.$nextTick(async () => {
+        const cy = await this.$refs.cy.instance;
+        cy.elements().remove();
+        cy.add(this.elementos);
+        await this.afterCreated(cy);
+      });
+    },
   },
   computed: {
     elementos() {
       var elementos = [];
-      for (const nodo of this.nodos) {
+      for (let i = 0; i < this.nodos.length; i++) {
+        const nodo = this.nodos[i];
         if (nodo && nodo.etiqueta && nodo.etiqueta != "") {
           elementos.push({
-            classes: [nodo.inicial ? 'inicial' : 'noInicial', nodo.final ? 'final' : 'noFinal'],
-            data: { id: nodo.etiqueta, etiqueta: nodo.etiqueta},
+            classes: [
+              this.iniciales[0] == i ? "inicial" : "noInicial",
+              this.finales[i] ? "final" : "noFinal",
+            ],
+            data: { id: nodo.etiqueta, etiqueta: nodo.etiqueta },
             position: {
               x: 1,
-              y: 1
+              y: 1,
             },
-            group: "nodes"
+            group: "nodes",
           });
         }
       }
       for (let i = 0; i < this.origenes.length; i++) {
         const origen = this.origenes[i];
         const destino = this.destinos[i];
-        const peso = this.pesos[i];
+        const conexion = this.conexiones[i];
         if (origen && destino) {
           elementos.push({
             data: {
               id: origen + destino,
               source: origen,
               target: destino,
-              weight: peso,
+              weight: conexion,
               // type: "loop"
             },
-            group: "edges"
+            group: "edges",
           });
         }
       }
       return elementos;
-    }
+    },
   },
   methods: {
     async afterCreated(cy) {
       await cy;
       cy.layout(this.config.layout).run();
-      cy.style(this.config.style).update();
-    }
-  }
+      // cy.style(this.config.style).update();
+    },
+  },
 };
 </script>

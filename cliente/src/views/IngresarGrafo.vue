@@ -4,15 +4,17 @@
       class="card"
       style="width: 100%; height: calc(100vh - 80px - 45px); border-radius: 10px;"
     >
-      <div class="is-full-h" style="padding: 20px;">
+      <div class="is-full-h">
         <div class="columns is-marginless is-paddingless is-full-h">
           <div class="column is-paddingless is-7">
             <stepper
               :nodos="nodos"
               :origenes="origenes"
               :destinos="destinos"
-              :pesos="pesos"
+              :conexiones="conexiones"
               :alfabeto="alfabeto"
+              :iniciales="iniciales"
+              :finales="finales"
               :onFinalizar="onFinalizar"
             />
           </div>
@@ -24,7 +26,9 @@
               :nodos="nodos"
               :origenes="origenes"
               :destinos="destinos"
-              :pesos="pesos"
+              :finales="finales"
+              :iniciales="iniciales"
+              :conexiones="conexiones"
             />
           </div>
         </div>
@@ -48,64 +52,80 @@ export default {
     nodos: [],
     origenes: [],
     destinos: [],
-    pesos: [],
-    alfabeto: []
+    conexiones: [],
+    iniciales: [],
+    finales: [],
+    alfabeto: [],
   }),
   mounted() {
-    if(this.grafoSeleccionado == 1){
+    if (this.grafoSeleccionado == 1) {
       this.nodos = this.$store.state.nodosUno;
       this.origenes = this.$store.state.origenesUno;
       this.destinos = this.$store.state.destinosUno;
-      this.pesos = this.$store.state.pesosUno;
+      this.conexiones = this.$store.state.conexionesUno;
       this.alfabeto = this.$store.state.alfabetoUno;
+      this.iniciales = this.$store.state.inicialesUno;
+      this.finales = this.$store.state.finalesUno;
     }
-    if(this.grafoSeleccionado == 2){
+    if (this.grafoSeleccionado == 2) {
       this.nodos = this.$store.state.nodosDos;
       this.origenes = this.$store.state.origenesDos;
       this.destinos = this.$store.state.destinosDos;
-      this.pesos = this.$store.state.pesosDos;
+      this.conexiones = this.$store.state.conexionesDos;
       this.alfabeto = this.$store.state.alfabetoDos;
+      this.iniciales = this.$store.state.inicialesDos;
+      this.finales = this.$store.state.finalesDos;
     }
   },
   watch: {
     grafoSeleccionado: function () {
-      console.log("GRAFOSELECCIONADO ", this.$store.state);
-      if(this.grafoSeleccionado == 1){
+      if (this.grafoSeleccionado == 1) {
         this.nodos = this.$store.state.nodosUno;
         this.origenes = this.$store.state.origenesUno;
         this.destinos = this.$store.state.destinosUno;
-        this.pesos = this.$store.state.pesosUno;
+        this.conexiones = this.$store.state.conexionesUno;
         this.alfabeto = this.$store.state.alfabetoUno;
+        this.iniciales = this.$store.state.inicialesUno;
+        this.finales = this.$store.state.finalesUno;
       }
-      if(this.grafoSeleccionado == 2){
+      if (this.grafoSeleccionado == 2) {
         this.nodos = this.$store.state.nodosDos;
         this.origenes = this.$store.state.origenesDos;
         this.destinos = this.$store.state.destinosDos;
-        this.pesos = this.$store.state.pesosDos;
+        this.conexiones = this.$store.state.conexionesDos;
         this.alfabeto = this.$store.state.alfabetoDos;
+        this.iniciales = this.$store.state.inicialesDos;
+        this.finales = this.$store.state.finalesDos;
       }
     }
   },
   methods: {
     onFinalizar() {
-      if(this.grafoSeleccionado == 1){
+      if (this.grafoSeleccionado == 1) {
         this.$store.commit("crearAutomataUno", {
           nodos: this.nodos,
           origenes: this.origenes,
           destinos: this.destinos,
-          pesos: this.pesos,
-          alfabeto: this.alfabeto
+          conexiones: this.conexiones,
+          alfabeto: this.alfabeto,
+          iniciales: this.iniciales,
+          finales: this.finales
         });
       }
-      if(this.grafoSeleccionado == 2){
+      if (this.grafoSeleccionado == 2) {
         this.$store.commit("crearAutomataDos", {
           nodos: this.nodos,
           origenes: this.origenes,
           destinos: this.destinos,
-          pesos: this.pesos,
-          alfabeto: this.alfabeto
+          conexiones: this.conexiones,
+          alfabeto: this.alfabeto,
+          iniciales: this.iniciales,
+          finales: this.finales
         });
       }
+      console.log("AUTOMATA 1:", this.$store.getters.automataUno);
+      console.log("AUTOMATA 2:", this.$store.getters.automataDos);
+      
       this.onGuardar();
     },
   },

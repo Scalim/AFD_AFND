@@ -18,15 +18,25 @@ var destinosUno =
     localStorage.getItem("destinosUno") != "undefined" ?
     JSON.parse(localStorage.getItem("destinosUno") || "null") : [];
 
-var pesosUno =
-    localStorage.getItem("pesosUno") &&
-    localStorage.getItem("pesosUno") != "undefined" ?
-    JSON.parse(localStorage.getItem("pesosUno") || "null") : [];
+var conexionesUno =
+    localStorage.getItem("conexionesUno") &&
+    localStorage.getItem("conexionesUno") != "undefined" ?
+    JSON.parse(localStorage.getItem("conexionesUno") || "null") : [];
 
 var alfabetoUno =
     localStorage.getItem("alfabetoUno") &&
     localStorage.getItem("alfabetoUno") != "undefined" ?
     JSON.parse(localStorage.getItem("alfabetoUno") || "null") : [];
+
+var inicialesUno =
+    localStorage.getItem("inicialesUno") &&
+    localStorage.getItem("inicialesUno") != "undefined" ?
+    JSON.parse(localStorage.getItem("inicialesUno") || "null") : [];
+
+var finalesUno =
+    localStorage.getItem("finalesUno") &&
+    localStorage.getItem("finalesUno") != "undefined" ?
+    JSON.parse(localStorage.getItem("finalesUno") || "null") : [];
 
 // Datos segundo autómata
 var nodosDos =
@@ -43,71 +53,99 @@ var destinosDos =
     localStorage.getItem("destinosDos") != "undefined" ?
     JSON.parse(localStorage.getItem("destinosDos") || "null") : [];
 
-var pesosDos =
-    localStorage.getItem("pesosDos") &&
-    localStorage.getItem("pesosDos") != "undefined" ?
-    JSON.parse(localStorage.getItem("pesosDos") || "null") : [];
+var conexionesDos =
+    localStorage.getItem("conexionesDos") &&
+    localStorage.getItem("conexionesDos") != "undefined" ?
+    JSON.parse(localStorage.getItem("conexionesDos") || "null") : [];
 
 var alfabetoDos =
     localStorage.getItem("alfabetoDos") &&
     localStorage.getItem("alfabetoDos") != "undefined" ?
     JSON.parse(localStorage.getItem("alfabetoDos") || "null") : [];
 
+var inicialesDos =
+    localStorage.getItem("inicialesDos") &&
+    localStorage.getItem("inicialesDos") != "undefined" ?
+    JSON.parse(localStorage.getItem("inicialesDos") || "null") : [];
+
+var finalesDos =
+    localStorage.getItem("finalesDos") &&
+    localStorage.getItem("finalesDos") != "undefined" ?
+    JSON.parse(localStorage.getItem("finalesDos") || "null") : [];
+
 const store = new Vuex.Store({
     state: {
         nodosUno,
         origenesUno,
         destinosUno,
-        pesosUno,
-        alfabetoUno, 
+        conexionesUno,
+        alfabetoUno,
+        inicialesUno,
+        finalesUno,
         nodosDos,
         origenesDos,
         destinosDos,
-        pesosDos,
-        alfabetoDos
+        conexionesDos,
+        alfabetoDos,
+        inicialesDos,
+        finalesDos
     },
     mutations: {
         crearAutomataUno(state, payload) {
             state.nodosUno = payload.nodos;
             state.origenesUno = payload.origenes;
             state.destinosUno = payload.destinos;
-            state.pesosUno = payload.pesos;
+            state.conexionesUno = payload.conexiones;
             state.alfabetoUno = payload.alfabeto;
+            state.inicialesUno = payload.iniciales;
+            state.finalesUno = payload.finales;
 
             localStorage.setItem("nodosUno", JSON.stringify(payload.nodos));
             localStorage.setItem("origenesUno", JSON.stringify(payload.origenes));
             localStorage.setItem("destinosUno", JSON.stringify(payload.destinos));
-            localStorage.setItem("pesosUno", JSON.stringify(payload.pesos));
+            localStorage.setItem("conexionesUno", JSON.stringify(payload.conexiones));
             localStorage.setItem("alfabetoUno", JSON.stringify(payload.alfabeto));
+            localStorage.setItem("inicialesUno", JSON.stringify(payload.iniciales));
+            localStorage.setItem("finalesUno", JSON.stringify(payload.finales));
+
         },
         crearAutomataDos(state, payload) {
             state.nodosDos = payload.nodos;
             state.origenesDos = payload.origenes;
             state.destinosDos = payload.destinos;
-            state.pesosDos = payload.pesos;
+            state.conexionesDos = payload.conexiones;
             state.alfabetoDos = payload.alfabeto;
+            state.inicialesDos = payload.iniciales;
+            state.finalesDos = payload.finales;
 
             localStorage.setItem("nodosDos", JSON.stringify(payload.nodos));
             localStorage.setItem("origenesDos", JSON.stringify(payload.origenes));
             localStorage.setItem("destinosDos", JSON.stringify(payload.destinos));
-            localStorage.setItem("pesosDos", JSON.stringify(payload.pesos));
+            localStorage.setItem("conexionesDos", JSON.stringify(payload.conexiones));
             localStorage.setItem("alfabetoDos", JSON.stringify(payload.alfabeto));
+            localStorage.setItem("inicialesDos", JSON.stringify(payload.iniciales));
+            localStorage.setItem("finalesDos", JSON.stringify(payload.finales));
         },
     },
     getters: {
-        grafoUno: state => {
+        automataUno: state => {
             const alfabeto = state.alfabetoUno;
             var aristas = [];
             var vertices = [];
 
-            for (const nodo of state.nodosUno) {
-                vertices.push(nodo.etiqueta);
+            for (let i = 0; i < state.nodosUno.length; i++){
+                const inicial = state.inicialesUno[i];
+                const final = state.finalesUno[i];
+                const nodo = nodosUno[i].etiqueta;
+                
+                //NO SÉ SI AGREGAR EL ESTADO DE INICIAL Y FINAL
+                vertices.push(nodo);
             }
 
             for (let i = 0; i < state.origenesUno.length; i++) {
                 const origen = state.origenesUno[i];
                 const destino = state.destinosUno[i];
-                const peso = state.pesosUno[i];
+                const peso = state.conexionesUno[i];
 
                 aristas.push({
                     inicio: origen,
@@ -121,19 +159,24 @@ const store = new Vuex.Store({
                 alfabeto
             };
         },
-        grafoDos: state => {
+        automataDos: state => {
             const alfabeto = state.alfabetoDos;
             var aristas = [];
             var vertices = [];
 
-            for (const nodo of state.nodosDos) {
-                vertices.push(nodo.etiqueta);
+            for (let i = 0; i < state.nodosDos.length; i++){
+                const inicial = state.inicialesDos[i];
+                const final = state.finalesDos[i];
+                const nodo = nodosDos[i].etiqueta;
+                
+                //NO SÉ SI AGREGAR EL ESTADO DE INICIAL Y FINAL
+                vertices.push(nodo);
             }
 
             for (let i = 0; i < state.origenesDos.length; i++) {
                 const origen = state.origenesDos[i];
                 const destino = state.destinosDos[i];
-                const peso = state.pesosDos[i];
+                const peso = state.conexionesDos[i];
 
                 aristas.push({
                     inicio: origen,
