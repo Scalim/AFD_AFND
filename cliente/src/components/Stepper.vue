@@ -18,7 +18,7 @@
         class="is-full-h"
         style="border-bottom: 2px solid #f5f5f5; border-top: 2px solid #f5f5f5; padding: 10px;"
       >
-        <alfabeto :alfabeto="alfabeto"></alfabeto>
+        <alfabeto v-model="alfabeto"></alfabeto>
       </b-step-item>
       <b-step-item
         step="2"
@@ -123,9 +123,9 @@ export default {
   },
   mounted() {},
   watch: {
-    alfabeto(){
-      console.log("LARGO ALFABETO: ",this.alfabeto.length);
-    }
+    alfabeto() {
+      console.log("LARGO ALFABETO: ", this.alfabeto.length);
+    },
   },
   computed: {
     puedeAvanzar() {

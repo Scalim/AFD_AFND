@@ -149,7 +149,7 @@ export default {
               id: origen + destino,
               source: origen,
               target: destino,
-              weight: conexion,
+              weight: conexion || "Ɛ",
               // type: "loop"
             },
             group: "edges",

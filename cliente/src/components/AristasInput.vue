@@ -45,7 +45,7 @@
                 open-on-focus
                 v-model="conexiones[i]"
                 field="etiqueta"
-                placeholder="Alfabeto"
+                placeholder="Ɛ"
                 clearable
               >
                 <template slot="empty">Sin resultados</template>

@@ -2,9 +2,10 @@
   <div class="is-full-h" style="padding: 20px; overflow-y: scroll;">
     <b-field label="Añadir alfabeto (No incluir vacío)">
       <b-taginput
-        v-model="alfabetoActual"
         ellipsis
         icon="label"
+        v-bind:value="value"
+        @input="updateValue"
         placeholder="Agregar"
       ></b-taginput>
     </b-field>
@@ -13,21 +14,26 @@
 <script>
 export default {
   name: "Alfabeto",
-  props: ["alfabeto"],
+  props: {
+    value: {
+      type: Array,
+    },
+  },
   data: () => ({
     alfabetoActual: [],
     primero: true,
   }),
+  computed: {},
   mounted() {
-    if(this.alfabeto.length != 0 && this.primero){
+    if (this.alfabeto.length != 0 && this.primero) {
       this.alfabetoActual = this.alfabeto;
       this.primero = false;
     }
   },
   watch: {
-    alfabeto(){
-      if(this.alfabeto.length != 0 && this.primero){
-        this.alfabetoActual = this.alfabeto;
+    alfabeto(val) {
+      if (val.length != 0 && this.primero) {
+        this.alfabetoActual = val;
         this.primero = false;
       }
     },
@@ -35,6 +41,10 @@ export default {
       this.alfabeto = this.alfabetoActual;
     },
   },
-  methods: {},
+  methods: {
+    updateValue: function(value) {
+      this.$emit("input", value);
+    },
+  },
 };
 </script>
