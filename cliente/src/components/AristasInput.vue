@@ -43,6 +43,7 @@
                 :data="alfabeto"
                 keep-first
                 open-on-focus
+                v-model="conexiones[i]"
                 field="etiqueta"
                 placeholder="Alfabeto"
                 clearable
@@ -51,28 +52,36 @@
               </b-autocomplete>
             </b-field>
 
-            <b-tooltip
-              v-if="origenes.length > 1"
-              label="Eliminar"
-              class="is-danger"
-              position="is-left"
-              style="margin-top: -25px;"
-            >
-              <a @click="eliminarArista(i)" style="margin-top: 30px;">
-                <b-icon
-                  pack="fa"
-                  class="is-danger"
-                  icon="minus-circle"
-                ></b-icon>
-              </a>
-            </b-tooltip>
-            <div v-else style="margin-top: 5px;">
-              <b-icon
-                pack="fa"
-                icon="minus-circle"
-                style="color: grey;"
-              ></b-icon>
-            </div>
+            <v-tooltip left>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  icon
+                  color="error"
+                  :disabled="validarArista(i).length > 0"
+                  @click="invertirArista(i)"
+                  v-bind="attrs"
+                  v-on="on"
+                >
+                  <v-icon>mdi-swap-horizontal-bold</v-icon>
+                </v-btn>
+              </template>
+              <span>Invertido</span>
+            </v-tooltip>
+            <v-tooltip left>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  icon
+                  color="error"
+                  :disabled="origenes.length <= 1"
+                  @click="eliminarArista(i)"
+                  v-bind="attrs"
+                  v-on="on"
+                >
+                  <v-icon>mdi-minus-circle</v-icon>
+                </v-btn>
+              </template>
+              <span>Eliminar</span>
+            </v-tooltip>
           </b-field>
         </b-field>
         <div class="is-marginless is-paddingless">
@@ -109,32 +118,8 @@
 <script>
 export default {
   name: "AristasInput",
-  props: ["nodos", "origenes", "destinos", "pesos"],
-  data: () => ({
-    alfabeto: ['a', 'b'],
-    config: {
-      style: [
-        {
-          selector: "node",
-          style: {
-            "background-color": "#7958d5",
-            label: "data(id)",
-          },
-        },
-        {
-          selector: "edge",
-          style: {
-            width: 3,
-            "curve-style": "bezier",
-            "line-color": "#ccc",
-            "target-arrow-color": "#ccc",
-            "target-arrow-shape": "triangle",
-          },
-        },
-      ],
-      layout: { name: "circle", row: 1 },
-    },
-  }),
+  props: ["nodos", "origenes", "conexiones", "destinos", "alfabeto"],
+  data: () => ({}),
   mounted() {},
   computed: {
     sonTodosValidos() {
@@ -150,17 +135,22 @@ export default {
     agregarArista() {
       this.origenes.push(null);
       this.destinos.push(null);
-      this.pesos.push(0);
+      this.conexiones.push(null);
     },
     eliminarArista(i) {
       this.origenes.splice(i, 1);
       this.destinos.splice(i, 1);
-      this.pesos.splice(i, 1);
+      this.conexiones.splice(i, 1);
+    },
+    invertirArista(i) {
+      this.origenes.push(this.destinos[i]);
+      this.destinos.push(this.origenes[i]);
+      this.conexiones.push(this.conexiones[i]);
     },
     validarArista(i) {
       const origen = this.origenes[i];
       const destino = this.destinos[i];
-      const peso = this.pesos[i];
+      const conexion = this.conexiones[i];
 
       var errores = [];
 
@@ -176,8 +166,8 @@ export default {
         errores.push("Debe seleccion un nodo de destino válido");
       }
 
-      if (peso == null || peso < 0) {
-        errores.push("Debe ingresar un peso válido");
+      if (conexion == null) {
+        errores.push("Debe ingresar un caracter válido");
       }
       return errores;
     },
@@ -191,10 +181,6 @@ export default {
         });
       }
       return this.nodos;
-    },
-    async afterCreated(cy) {
-      await cy;
-      cy.layout(this.config.layout).run();
     },
   },
 };

@@ -18,10 +18,10 @@ var destinosUno =
     localStorage.getItem("destinosUno") != "undefined" ?
     JSON.parse(localStorage.getItem("destinosUno") || "null") : [];
 
-var pesosUno =
-    localStorage.getItem("pesosUno") &&
-    localStorage.getItem("pesosUno") != "undefined" ?
-    JSON.parse(localStorage.getItem("pesosUno") || "null") : [];
+var conexionesUno =
+    localStorage.getItem("conexionesUno") &&
+    localStorage.getItem("conexionesUno") != "undefined" ?
+    JSON.parse(localStorage.getItem("conexionesUno") || "null") : [];
 
 var alfabetoUno =
     localStorage.getItem("alfabetoUno") &&
@@ -43,10 +43,10 @@ var destinosDos =
     localStorage.getItem("destinosDos") != "undefined" ?
     JSON.parse(localStorage.getItem("destinosDos") || "null") : [];
 
-var pesosDos =
-    localStorage.getItem("pesosDos") &&
-    localStorage.getItem("pesosDos") != "undefined" ?
-    JSON.parse(localStorage.getItem("pesosDos") || "null") : [];
+var conexionesDos =
+    localStorage.getItem("conexionesDos") &&
+    localStorage.getItem("conexionesDos") != "undefined" ?
+    JSON.parse(localStorage.getItem("conexionesDos") || "null") : [];
 
 var alfabetoDos =
     localStorage.getItem("alfabetoDos") &&
@@ -58,12 +58,12 @@ const store = new Vuex.Store({
         nodosUno,
         origenesUno,
         destinosUno,
-        pesosUno,
-        alfabetoUno, 
+        conexionesUno,
+        alfabetoUno,
         nodosDos,
         origenesDos,
         destinosDos,
-        pesosDos,
+        conexionesDos,
         alfabetoDos
     },
     mutations: {
@@ -71,26 +71,26 @@ const store = new Vuex.Store({
             state.nodosUno = payload.nodos;
             state.origenesUno = payload.origenes;
             state.destinosUno = payload.destinos;
-            state.pesosUno = payload.pesos;
+            state.conexionesUno = payload.conexiones;
             state.alfabetoUno = payload.alfabeto;
 
             localStorage.setItem("nodosUno", JSON.stringify(payload.nodos));
             localStorage.setItem("origenesUno", JSON.stringify(payload.origenes));
             localStorage.setItem("destinosUno", JSON.stringify(payload.destinos));
-            localStorage.setItem("pesosUno", JSON.stringify(payload.pesos));
+            localStorage.setItem("conexionesUno", JSON.stringify(payload.conexiones));
             localStorage.setItem("alfabetoUno", JSON.stringify(payload.alfabeto));
         },
         crearAutomataDos(state, payload) {
             state.nodosDos = payload.nodos;
             state.origenesDos = payload.origenes;
             state.destinosDos = payload.destinos;
-            state.pesosDos = payload.pesos;
+            state.conexionesDos = payload.conexiones;
             state.alfabetoDos = payload.alfabeto;
 
             localStorage.setItem("nodosDos", JSON.stringify(payload.nodos));
             localStorage.setItem("origenesDos", JSON.stringify(payload.origenes));
             localStorage.setItem("destinosDos", JSON.stringify(payload.destinos));
-            localStorage.setItem("pesosDos", JSON.stringify(payload.pesos));
+            localStorage.setItem("conexionesDos", JSON.stringify(payload.conexiones));
             localStorage.setItem("alfabetoDos", JSON.stringify(payload.alfabeto));
         },
     },
@@ -107,7 +107,7 @@ const store = new Vuex.Store({
             for (let i = 0; i < state.origenesUno.length; i++) {
                 const origen = state.origenesUno[i];
                 const destino = state.destinosUno[i];
-                const peso = state.pesosUno[i];
+                const peso = state.conexionesUno[i];
 
                 aristas.push({
                     inicio: origen,
@@ -133,7 +133,7 @@ const store = new Vuex.Store({
             for (let i = 0; i < state.origenesDos.length; i++) {
                 const origen = state.origenesDos[i];
                 const destino = state.destinosDos[i];
-                const peso = state.pesosDos[i];
+                const peso = state.conexionesDos[i];
 
                 aristas.push({
                     inicio: origen,
