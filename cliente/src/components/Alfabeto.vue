@@ -21,12 +21,16 @@ export default {
   data() {
     return {
         cantidad: null,
-        nuevoAlfabeto: []
+        nuevoAlfabeto: [],
     };
   },
   mounted(){
       this.cantidad = this.nodos.length;
       this.nuevoAlfabeto = this.alfabeto;
+
+      console.log("ESTO RECIBO");
+      console.log("ALFABETO: ", this.alfabeto);
+      console.log("NODOS: ", this.nodos);
   },
   watch: {
     cantidad: function(){
@@ -38,7 +42,7 @@ export default {
                 final: false
             });
         } else if(this.cantidad < this.nodos.length){
-            this.nodos.pop();
+            // this.nodos.pop();
         }
     },
     nuevoAlfabeto: function(){

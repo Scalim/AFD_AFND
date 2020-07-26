@@ -67,6 +67,25 @@ export default {
       this.alfabeto = this.$store.state.alfabetoDos;
     }
   },
+  watch: {
+    grafoSeleccionado: function () {
+      console.log("GRAFOSELECCIONADO ", this.$store.state);
+      if(this.grafoSeleccionado == 1){
+        this.nodos = this.$store.state.nodosUno;
+        this.origenes = this.$store.state.origenesUno;
+        this.destinos = this.$store.state.destinosUno;
+        this.pesos = this.$store.state.pesosUno;
+        this.alfabeto = this.$store.state.alfabetoUno;
+      }
+      if(this.grafoSeleccionado == 2){
+        this.nodos = this.$store.state.nodosDos;
+        this.origenes = this.$store.state.origenesDos;
+        this.destinos = this.$store.state.destinosDos;
+        this.pesos = this.$store.state.pesosDos;
+        this.alfabeto = this.$store.state.alfabetoDos;
+      }
+    }
+  },
   methods: {
     onFinalizar() {
       if(this.grafoSeleccionado == 1){

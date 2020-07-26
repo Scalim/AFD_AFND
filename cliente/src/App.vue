@@ -98,6 +98,7 @@ export default {
     },
     onGuardar() {
       this.editarGrafoModal = false;
+      this.grafoSeleccionado = null;
       this.$buefy.toast.open({
         message: "El grafo se actualizó correctamente",
         type: "is-success",
