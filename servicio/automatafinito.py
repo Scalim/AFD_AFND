@@ -317,7 +317,7 @@ def conx_void(nodo, partidas, caminos):
     cont = 0
     while(i < len(partidas)):
         if(partidas[i] == nodo):
-            if(caminos[i] == ""):
+            if(caminos[i] == None):
                 return True
         i = i+1
     return False
@@ -327,7 +327,7 @@ def caminos_void(nodo, partidas, caminos, destinos):
     i = 0
     lista = []
     while(i < len(partidas)):
-        if(partidas[i] == nodo and caminos[i] == ""):
+        if(partidas[i] == nodo and caminos[i] == None):
             lista.append(destinos[i])
         i = i+1
     return lista
@@ -490,7 +490,7 @@ def transformacion(alfabeto, nodos, iniciales, finales, conexiones):
     while(i < len(nodos)):
         j = 0
         while(j < len(alfabeto)):
-            if((union_nodos(M[i][j]) not in nodosAFD) and (union_nodos(M[i][j]) != "")):
+            if((union_nodos(M[i][j]) not in nodosAFD) and (union_nodos(M[i][j]) != None)):
                 nodosAFD.append(union_nodos(M[i][j]))
             j += 1
         i += 1
@@ -517,11 +517,11 @@ def transformacion(alfabeto, nodos, iniciales, finales, conexiones):
                 aux += k
             Pafd.append(nodosAFD[i])
             Cafd.append(alfabeto[abc])
-            if(aux == ""):
+            if(aux == None):
                 Dafd.append("sumidero")
             else:
                 Dafd.append(aux)
-            if((aux not in nodosAFD) and aux != ""):
+            if((aux not in nodosAFD) and aux != None):
                 nodosAFD.append(aux)
             abc += 1
         i += 1
