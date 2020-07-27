@@ -9,20 +9,20 @@ application.config['CORS_HEADERS'] = 'Content-Type'
 @application.route('/', methods=['GET'])
 @cross_origin(origin='*')
 def conectar():
-    print(fecha_y_hora()+'El servicio funciona correctamente')
+    print(fecha_y_hora()+"[api.py] conectar()")
     return jsonify(mensaje='Conectado a servicio')
 
 @application.route('/simplificar', methods=['POST'])
 @cross_origin(origin='*')
-def simplificarAutomata():
-    print(fecha_y_hora()+'Mensaje con info')
+def simplificar_automata():
+    print(fecha_y_hora()+"[api.py] simplificar_automata()")
     content = request.get_json(silent=True)
     return simplificar(content)
 
 @application.route('/operar', methods=['POST'])
 @cross_origin(origin='*')
-def operarAutomata():
-    print(fecha_y_hora()+'Mensaje con info')
+def operar_automata():
+    print(fecha_y_hora()+"[api.py] operar_automata()")
     content = request.get_json(silent=True)
     return operar(content)
 
