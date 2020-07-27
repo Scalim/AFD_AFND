@@ -467,6 +467,9 @@ def transformacion(alfabeto,nodos,iniciales,finales,conexiones):
     Pafd=[]
     Cafd=[]
     Dafd=[]
+    AUX=caminos_void(iniciales[0],P,C,D)
+    for i in AUX:
+        iniciales.append(i)
     inicialAFD.append(unionNodos(iniciales))
     nodosAFD.append(unionNodos(iniciales))
     i=0
