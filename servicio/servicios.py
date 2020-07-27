@@ -22,10 +22,22 @@ def parsear_automata(automata):
 
 def simplificar(json):
     print(fecha_y_hora()+"[servicios.py] simplificar()")
-    automata = parsear_automata(json['automata'])
+    automata = parsear_automata(json)
     print("Autómata:")
     automata.mostrar_quintupla()
-    return jsonify(["uwu"])
+    simplificado = automata.simplificar_afd()
+    simplificado.mostrar_quintupla()
+    if (isinstance(simplificado, str)):
+        return jsonify({
+            "eraAfd": False,
+            "error": simplificado
+        })
+    else:
+        return jsonify({
+            "eraAfd": True,
+            "simplificado": simplificado.convertir_diccionario()
+
+        })
 
 
 def transformar(json):
@@ -67,11 +79,11 @@ def operar(json):
     operado = automata1.operar(operacion, automata2)
     if (isinstance(operado, str)):
         return jsonify({
-            "esAfd": False,
+            "eraAfd": False,
             "error": operado
         })
     else:
         return jsonify({
             "automata": operado.convertir_diccionario(),
-            "esAfd": True,
+            "eraAfd": True,
         })

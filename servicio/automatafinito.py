@@ -81,6 +81,7 @@ class AutomataFinito:
         self.K = delete(I, self.K)
         self.F = delete(I, self.F)
         self.s = decod(I, A, D)
+        return self
         # Lógica de simplificación
 
     def union(self, automata1):
@@ -90,13 +91,13 @@ class AutomataFinito:
         s = self.s.copy()
 
         E = E + list(set(automata1.E) - set(E))
-        K += automata1.K
+        K += automata1.K + ["Q0"]
         F += automata1.F
         s += automata1.s
 
         S = ["Q0"]
-        s.append(("Q0", None, self.S))
-        s.append(("Q0", None, automata1.S))
+        s.append(("Q0", None, self.S[0]))
+        s.append(("Q0", None, automata1.S[0]))
 
         print("Unión entre dos autómatas")
         # Lógica de la unión
@@ -134,11 +135,15 @@ class AutomataFinito:
     def interseccion(self, automata1):
         # ~(~A1 U ~A2)
         if (not self.es_afnd() and not automata1.es_afnd()):
-            A1Complemento = self.complemento()
-            A2Complemento = automata1.complemento()
-            automataUnido = A1Complemento.union(A2Complemento)
+            A1_complemento = self.complemento()
+            A1_complemento.mostrar_quintupla()
+            A2_complemento = automata1.complemento()
+            A2_complemento.mostrar_quintupla()
+            unido = A1_complemento.union(A2_complemento)
+            unido.mostrar_quintupla()
+            unido_afd = unido.obtener_afd()
 
-            return automataUnido.complemento()
+            return unido_afd.complemento()
         else:
             return "Ambos autómatas deben ser AFD"
 
