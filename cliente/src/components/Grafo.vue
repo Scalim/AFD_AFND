@@ -41,10 +41,6 @@ export default {
   },
   data() {
     return {
-      // nodos: [],
-      // origenes: [],
-      // destinos: [],
-      // pesos: [],
       config: {
         type: Object,
         layout: { name: "circle", row: 1 },
@@ -108,15 +104,6 @@ export default {
     };
   },
   mounted() {
-    // this.nodos = [
-    //   { id: 1, etiqueta: "A", inicial: true, final: false },
-    //   { id: 2, etiqueta: "B" , inicial: false, final: true},
-    //   { id: 3, etiqueta: "C" , inicial: false, final: false},
-    //   { id: 4, etiqueta: "D" , inicial: true, final: true}
-    // ];
-    // this.origenes = ["A"];
-    // this.destinos = ["B"];
-    // this.pesos = ["0"];
   },
   watch: {
     iniciales() {

@@ -32,7 +32,7 @@ export default {
   props: ["nodos", "finales", "iniciales"],
   data() {
     return {
-      cantidad: null,
+      cantidad: 0,
       inicialActual: [],
       primero: true
     };

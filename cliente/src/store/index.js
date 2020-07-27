@@ -129,66 +129,64 @@ const store = new Vuex.Store({
     },
     getters: {
         automataUno: state => {
-            const alfabeto = state.alfabetoUno;
-            var aristas = [];
-            var vertices = [];
+            var E = [];
+            var K = state.alfabetoUno;
+            var S = state.nodosUno[state.inicialesUno[0]].etiqueta;
+            var F = [];
+            var s = [];
 
             for (let i = 0; i < state.nodosUno.length; i++){
                 const inicial = state.inicialesUno[i];
                 const final = state.finalesUno[i];
-                const nodo = nodosUno[i].etiqueta;
-                
-                //NO SÉ SI AGREGAR EL ESTADO DE INICIAL Y FINAL
-                vertices.push(nodo);
+                const nodo = state.nodosUno[i].etiqueta;
+                E.push(nodo);
+                if(final){
+                    F.push(nodo);
+                }
             }
 
             for (let i = 0; i < state.origenesUno.length; i++) {
                 const origen = state.origenesUno[i];
                 const destino = state.destinosUno[i];
-                const peso = state.conexionesUno[i];
+                const conexion = state.conexionesUno[i];
 
-                aristas.push({
+                s.push({
                     inicio: origen,
+                    letra: conexion,
                     final: destino,
-                    peso: peso,
                 });
             }
-            return {
-                aristas,
-                vertices,
-                alfabeto
-            };
+            return { E, K, S, F, s };
         },
         automataDos: state => {
-            const alfabeto = state.alfabetoDos;
-            var aristas = [];
-            var vertices = [];
+            var E = [];
+            var K = state.alfabetoDos;
+            var S = state.nodosDos[state.inicialesDos[0]].etiqueta;
+            var F = [];
+            var s = [];
 
             for (let i = 0; i < state.nodosDos.length; i++){
                 const inicial = state.inicialesDos[i];
                 const final = state.finalesDos[i];
-                const nodo = nodosDos[i].etiqueta;
-                
-                //NO SÉ SI AGREGAR EL ESTADO DE INICIAL Y FINAL
-                vertices.push(nodo);
+                const nodo = state.nodosDos[i].etiqueta;
+                E.push(nodo);
+                if(final){
+                    F.push(nodo);
+                }
             }
 
             for (let i = 0; i < state.origenesDos.length; i++) {
                 const origen = state.origenesDos[i];
                 const destino = state.destinosDos[i];
-                const peso = state.conexionesDos[i];
+                const conexion = state.conexionesDos[i];
 
-                aristas.push({
+                s.push({
                     inicio: origen,
+                    letra: conexion,
                     final: destino,
-                    peso: peso,
                 });
             }
-            return {
-                aristas,
-                vertices,
-                alfabeto
-            };
+            return { E, K, S, F, s };
         }
     }
 });

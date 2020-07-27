@@ -24,7 +24,7 @@
           style="margin-bottom: 20px; margin-right: 20px;"
           size="is-medium"
           @click="seleccionGrafo(1)"
-          >AFND 1</b-button
+          >Autómata 1</b-button
         >
         <b-button
           type="is-primary"
@@ -34,7 +34,7 @@
           style="margin-bottom: 20px;"
           size="is-medium"
           @click="seleccionGrafo(2)"
-          >AFND 2</b-button
+          >Autómata 2</b-button
         >
         </div>
         <a href="https://github.com/Scalim/AFD_AFND"

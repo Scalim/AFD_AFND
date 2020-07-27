@@ -7,24 +7,11 @@
       <div class="is-full-h" style="padding: 20px;">
         <div class="columns is-marginless is-paddingless is-full-h">
           <div class="column is-paddingless is-7">
-            <stepper
-              :nodos="nodos"
-              :origenes="origenes"
-              :destinos="destinos"
-              :pesos="pesos"
-              :onFinalizar="onFinalizar"
-            />
           </div>
           <div
             class="column is-paddingless is-5"
             style="border-left: 2px solid #f5f5f5; "
           >
-            <grafo
-              :nodos="nodos"
-              :origenes="origenes"
-              :destinos="destinos"
-              :pesos="pesos"
-            />
           </div>
         </div>
       </div>
