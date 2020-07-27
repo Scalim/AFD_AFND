@@ -18,6 +18,29 @@
     </b-modal>
     <div style="padding: 30px; width: calc(100% - 50px); float: right">
       <div style="display: flex; justify-content: space-between;">
+<<<<<<< HEAD
+      <div>
+        <b-button
+          type="is-primary"
+          inverted
+          rounded
+          icon-left="pencil"
+          style="margin-bottom: 20px; margin-right: 20px;"
+          size="is-medium"
+          @click="seleccionGrafo(1)"
+          >Autómata 1</b-button
+        >
+        <b-button
+          type="is-primary"
+          inverted
+          rounded
+          icon-left="pencil"
+          style="margin-bottom: 20px;"
+          size="is-medium"
+          @click="seleccionGrafo(2)"
+          >Autómata 2</b-button
+        >
+=======
         <div>
           <b-button
             type="is-primary"
@@ -39,6 +62,7 @@
             @click="seleccionGrafo(2)"
             >AFND 2</b-button
           >
+>>>>>>> 506e0c61f9e12cb233c2ea6af1fb1443d5369a0c
         </div>
         <a href="https://github.com/Scalim/AFD_AFND"
           ><b-icon style="color: white;" icon="github-circle" size="is-medium">

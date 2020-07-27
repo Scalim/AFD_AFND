@@ -124,7 +124,6 @@ export default {
   mounted() {},
   watch: {
     alfabeto() {
-      console.log("LARGO ALFABETO: ", this.alfabeto.length);
     },
   },
   computed: {

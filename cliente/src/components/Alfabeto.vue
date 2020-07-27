@@ -25,7 +25,7 @@ export default {
   }),
   computed: {},
   mounted() {
-    if (this.alfabeto.length != 0 && this.primero) {
+    if (this.alfabeto && this.alfabeto.length != 0 && this.primero) {
       this.alfabetoActual = this.alfabeto;
       this.primero = false;
     }

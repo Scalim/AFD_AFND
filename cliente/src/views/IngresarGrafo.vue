@@ -123,9 +123,6 @@ export default {
           finales: this.finales
         });
       }
-      console.log("AUTOMATA 1:", this.$store.getters.automataUno);
-      console.log("AUTOMATA 2:", this.$store.getters.automataDos);
-      
       this.onGuardar();
     },
   },

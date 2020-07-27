@@ -165,10 +165,6 @@ export default {
       } else if (!this.nodos.filter((n) => n.etiqueta == destino).length) {
         errores.push("Debe seleccion un nodo de destino válido");
       }
-
-      if (conexion == null) {
-        errores.push("Debe ingresar un caracter válido");
-      }
       return errores;
     },
 
