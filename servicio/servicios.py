@@ -34,16 +34,17 @@ def transformar(json):
     print("Autómata:")
     automata.mostrar_quintupla()
     transformado = automata.obtener_afd()
+    transformado.mostrar_quintupla()
     if (isinstance(transformado, str)):
         return jsonify({
             "eraAfd": True,
-            "transformado": jsonify(automata.convertir_diccionario())
+            "transformado": automata.convertir_diccionario()
         })
     else:
-        return {
+        return jsonify({
             "eraAfd": False,
-            "transformado": jsonify(transformado.convertir_diccionario())
-        }
+            "transformado": transformado.convertir_diccionario()
+        })
 
 
 def operar(json):
@@ -70,7 +71,7 @@ def operar(json):
             "error": operado
         })
     else:
-        return {
-            "automata": jsonify(operado.convertir_diccionario()),
+        return jsonify({
+            "automata": operado.convertir_diccionario(),
             "esAfd": True,
-        }
+        })

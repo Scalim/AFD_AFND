@@ -54,6 +54,8 @@ class AutomataFinito:
         self.S = inicio
         self.F = finales
         self.s = conexiones
+        return AutomataFinito(self.E, nodos, inicio, finales, conexiones)
+
         # Lógica de conversión
 
     def simplificar_afd(self):
