@@ -501,6 +501,8 @@ def transformacion(alfabeto,nodos,iniciales,finales,conexiones):
             Cafd.append(alfabeto[abc])
             if(aux == ""):
                 Dafd.append("sumidero")
+                if("sumidero" not in nodosAFD):
+                    nodosAFD.append("sumidero")
             else:
                 Dafd.append(aux)
             if((aux not in nodosAFD) and aux != ""):
