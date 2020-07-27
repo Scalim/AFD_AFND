@@ -7,36 +7,36 @@ class AutomataFinito:
         self.F = F  # (F) Finales
         self.s = s  # (δ) Conexiones
 
-    def nodosString(self):
+    def nodos_string(self):
         return "K = {" + ", ".join(self.K) + "}"
 
-    def alfabetoString(self):
+    def alfabeto_string(self):
         return "Σ = {" + ", ".join(self.E) + "}"
 
-    def inicialesString(self):
+    def iniciales_string(self):
         return "S = {" + ", ".join(self.S) + "}"
 
-    def finalesString(self):
+    def finales_string(self):
         return "F = {" + ", ".join(self.F) + "}"
 
-    def conexionesString(self):
+    def conexiones_string(self):
         return "δ = {" + ", ".join(self.s) + "}"
 
-    def mostrarQuintupla(self):
-        print(self.nodosString())
-        print(self.alfabetoString())
-        print(self.inicialesString())
-        print(self.finalesString())
-        print(self.conexionesString())
+    def mostrar_quintupla(self):
+        print(self.nodos_string())
+        print(self.alfabeto_string())
+        print(self.iniciales_string())
+        print(self.finales_string())
+        print(self.conexiones_string())
 
-    def esAfnd(self):
+    def es_afnd(self):
         for conexion in self.s:
             if (conexion[1] == None):
                 # Si la letra de esa arista es vacío
                 return True
         return False
 
-    def obtenerAfd(self):
+    def obtener_afd(self):
         nodos,inicio,finales,conexiones = transformacion(self.E,self.K,self.S,self.F,self.s)
         self.K=nodos
         self.S=inicio
@@ -45,7 +45,7 @@ class AutomataFinito:
             # Lógica de conversión
 
 
-    def simplificarAfd(self):
+    def simplificar_afd(self):
         print("Simplificar autómata")
         M=matriz_estados(self.E,self.K,self.F,self.s)
         I,A,D=enlaces(self.s)
@@ -90,7 +90,7 @@ class AutomataFinito:
         return AutomataFinito(E, K, S, F, s)
 
     def complemento(self, automata):
-        if (not automata.esAfnd):
+        if (not automata.es_afnd):
             # Es una propiedad sólo de AFD
             F = []
             K = automata.K.copy()
@@ -118,7 +118,7 @@ class AutomataFinito:
 
     def interseccion(self, automata1, automata2):
         # ~(~A1 U ~A2)
-        if (not automata1.esAfnd() and not automata2.esAfnd()):
+        if (not automata1.es_afnd() and not automata2.es_afnd()):
             return self.complemento(self.union(self.complemento(automata1), self.complemento(automata2)))
         else:
             raise Exception("Ambos autómatas deben ser AFD")
@@ -134,13 +134,13 @@ class AutomataFinito:
         elif (operacion == "concatenacion"):
             self.concatenacion(automata1, automata2)
 
-def buscar_id(variable,lista):
+def buscar_id(variable, lista):
     cont = 0
     for i in lista:
         if(i==variable):
             return cont
         cont=cont+1
-def matriz(alfabeto,nodos):
+def matriz(alfabeto, nodos):
     matriz=[]
     cont=0
     for i in alfabeto:
@@ -166,7 +166,7 @@ def enlaces(conexiones):
                 cont=cont+1 
     return nd_inic,alf_con,nd_dest
         
-def llenar_matrizC(nodos,alfabeto,conexiones):
+def llenar_matriz_c(nodos, alfabeto, conexiones):
     M=matriz(alfabeto,nodos)
     I,A,D=enlaces(conexiones)
     n=0
@@ -174,14 +174,14 @@ def llenar_matrizC(nodos,alfabeto,conexiones):
         M[buscar_id(I[n],nodos)][buscar_id(A[n],alfabeto)]=D[n]
         n=n+1
     return M
-def es_final(nodo,nodos,finales):
+def es_final(nodo, nodos, finales):
     for i in finales:
         if(i==nodos[nodo]):
             return True
     return False
 
-def matriz_estados(alfabeto,nodos,finales,conexiones):
-    C=llenar_matrizC(nodos,alfabeto,conexiones)
+def matriz_estados(alfabeto, nodos, finales, conexiones):
+    C=llenar_matriz_c(nodos,alfabeto,conexiones)
     E=matriz(nodos,nodos)
     i=0
     j=0
@@ -225,7 +225,7 @@ def matriz_estados(alfabeto,nodos,finales,conexiones):
         i=i+1
     return E
 
-def reapuntar(mantener,borrar,destinos) :
+def reapuntar(mantener, borrar, destinos) :
     indice=0
     for i in destinos:
         if(i==borrar):
@@ -243,7 +243,7 @@ def borracion(borrar, partidas, caminos, destinos):
         if(not val):
             i=i+1
 
-def delete(partidas,nodos):
+def delete(partidas, nodos):
     i=0
     while(i<len(nodos)):
         val=False
@@ -254,7 +254,7 @@ def delete(partidas,nodos):
             i=i+1
     return(nodos)
     
-def decod(partidas,caminos,destinos):
+def decod(partidas, caminos, destinos):
     lista=[]
     i=0
     while(i<len(partidas)):
@@ -263,7 +263,7 @@ def decod(partidas,caminos,destinos):
         i=i+1
     return lista
 
-def matE_AFND(alfabeto,nodos):
+def matE_AFND(alfabeto, nodos):
     matriz=[]
     cont=0
     for i in alfabeto:
@@ -279,7 +279,7 @@ def matE_AFND(alfabeto,nodos):
         i=i+1
     return matriz
 
-def conx_void(nodo,partidas,caminos):
+def conx_void(nodo, partidas, caminos):
     i=0
     cont=0
     while(i<len(partidas)):
@@ -289,7 +289,7 @@ def conx_void(nodo,partidas,caminos):
         i=i+1
     return False
 
-def caminos_void(nodo,partidas,caminos,destinos):
+def caminos_void(nodo, partidas, caminos, destinos):
     i=0
     lista=[]
     while(i<len(partidas)):
@@ -298,7 +298,7 @@ def caminos_void(nodo,partidas,caminos,destinos):
         i=i+1
     return lista
         
-def buscar_destino(nodo,camino,partidas,caminos,destinos):
+def buscar_destino(nodo, camino, partidas, caminos, destinos):
     i=0
     while(i<len(partidas)):
         if(partidas[i]==nodo and caminos[i]==camino):
@@ -361,13 +361,13 @@ def llenar_matCAFND(nodos,alfabeto,conexiones):
         i+=1
     return M
 
-def unionNodos(unir):
+def union_nodos(unir):
     aux=""
     for i in unir:
         aux+=i
     return aux
 
-def separar(nodo,nodos):
+def separar(nodo, nodos):
     aux=""
     lista=[]
     i=0
@@ -379,10 +379,10 @@ def separar(nodo,nodos):
         i+=1
     return lista
 
-def cant_destinos(id_nodo,matriz,camino):
+def cant_destinos(id_nodo, matriz, camino):
     return len(matriz[id_nodo][camino])
 
-def separar_caminos(conexion,nodos,guia,conexiones):
+def separar_caminos(conexion, nodos, guia, conexiones):
     Nnodos=[]
     auxP=[]
     auxC=[]
@@ -418,7 +418,7 @@ def separar_caminos(conexion,nodos,guia,conexiones):
     for i in Nnodos:
         nodos.append(i)
 
-def transformacion(alfabeto,nodos,iniciales,finales,conexiones):
+def transformacion(alfabeto, nodos, iniciales, finales, conexiones):
     i=0
     guia=1
     while(i<len(conexiones)):
@@ -434,14 +434,14 @@ def transformacion(alfabeto,nodos,iniciales,finales,conexiones):
     Pafd=[]
     Cafd=[]
     Dafd=[]
-    inicialAFD.append(unionNodos(iniciales))
-    nodosAFD.append(unionNodos(iniciales))
+    inicialAFD.append(union_nodos(iniciales))
+    nodosAFD.append(union_nodos(iniciales))
     i=0
     while(i<len(nodos)):
         j=0
         while(j<len(alfabeto)):
-            if((unionNodos(M[i][j]) not in nodosAFD) and (unionNodos(M[i][j])!= "")):
-                nodosAFD.append(unionNodos(M[i][j]))
+            if((union_nodos(M[i][j]) not in nodosAFD) and (union_nodos(M[i][j])!= "")):
+                nodosAFD.append(union_nodos(M[i][j]))
             j+=1
         i+=1
     i=0
@@ -484,4 +484,3 @@ def transformacion(alfabeto,nodos,iniciales,finales,conexiones):
     finalesAFD=list(OrderedDict.fromkeys(finalesAFD))
     conexionesAFD=decod(Pafd,Cafd,Dafd)
     return nodosAFD,inicialAFD,finalesAFD,conexionesAFD
-    
