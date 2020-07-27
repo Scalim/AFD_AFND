@@ -294,244 +294,226 @@ def decod(partidas, caminos, destinos):
         i = i+1
     return lista
 
-
-def matE_AFND(alfabeto, nodos):
-    matriz = []
-    cont = 0
+def matE_AFND(alfabeto,nodos):
+    matriz=[]
+    cont=0
     for i in alfabeto:
-        cont = cont+1
+        cont=cont+1
     for i in nodos:
         matriz.append([0]*cont)
-    i = 0
-    while(i < len(nodos)):
-        j = 0
-        while(j < len(alfabeto)):
-            matriz[i][j] = []
-            j = j+1
-        i = i+1
+    i=0
+    while(i<len(nodos)):
+        j=0
+        while(j<len(alfabeto)):
+            matriz[i][j]=[]
+            j+=1
+        i+=1
     return matriz
 
-
-def conx_void(nodo, partidas, caminos):
-    i = 0
-    cont = 0
-    while(i < len(partidas)):
-        if(partidas[i] == nodo):
-            if(caminos[i] == None):
+def conx_void(nodo,partidas,caminos):
+    i=0
+    cont=0
+    while(i<len(partidas)):
+        if(partidas[i]==nodo):
+            if(caminos[i]==None):
                 return True
-        i = i+1
+        i+=1
     return False
 
-
-def caminos_void(nodo, partidas, caminos, destinos):
-    i = 0
-    lista = []
-    while(i < len(partidas)):
-        if(partidas[i] == nodo and caminos[i] == None):
+def caminos_void(nodo,partidas,caminos,destinos):
+    i=0
+    lista=[]
+    while(i<len(partidas)):
+        if(partidas[i]==nodo and caminos[i]==None):
             lista.append(destinos[i])
-        i = i+1
+        i+=1
     return lista
-
-
-def buscar_destino(nodo, camino, partidas, caminos, destinos):
-    i = 0
-    while(i < len(partidas)):
-        if(partidas[i] == nodo and caminos[i] == camino):
+        
+def buscar_destino(nodo,camino,partidas,caminos,destinos):
+    i=0
+    while(i<len(partidas)):
+        if(partidas[i]==nodo and caminos[i]==camino):
             return destinos[i]
-        i = i+1
+        i+=1
     return "sumidero"
 
-
-def buscar_conxVoid(nodo, camino, partidas, caminos, destinos):
-    cant = 0
-    V = caminos_void(nodo, partidas, caminos, destinos)
-    cantidadV = len(V)
-    estacosa = ""
-    while(cant < cantidadV):
-        estacosa = estacosa + "|" + \
-            buscar_destino(V[cant], camino, partidas, caminos, destinos)+"|"
-        if(conx_void(V[cant], partidas, caminos)):
-            estacosa = estacosa + "|" + \
-                buscar_conxVoid(V[cant], camino, partidas,
-                                caminos, destinos) + "|"
-        cant = cant + 1
+def buscar_conxVoid(nodo,camino,partidas,caminos,destinos):
+    cant=0
+    V=caminos_void(nodo,partidas,caminos,destinos)
+    cantidadV=len(V)
+    estacosa=""
+    while(cant<cantidadV):
+        estacosa = estacosa + "|" + buscar_destino(V[cant],camino,partidas,caminos,destinos)+"|"
+        if(conx_void(V[cant],partidas,caminos)):
+            estacosa = estacosa + "|" + buscar_conxVoid(V[cant],camino,partidas,caminos,destinos) + "|"
+        cant+=1
     return estacosa
-
-
 def dest_to_list(estacosa):
-    i = 0
-    lista = []
-    aux = ""
-    mod = False
-    while(i < len(estacosa)):
-        if(estacosa[i] != "|"):
-            aux = aux+estacosa[i]
-            mod = True
-        if(estacosa[i] == "|" and mod):
-            mod = False
+    i=0
+    lista=[]
+    aux=""
+    mod=False
+    while(i<len(estacosa)):
+        val=False
+        if(estacosa[i]!="|"):
+            aux=aux+estacosa[i]
+            mod=True
+        if(estacosa[i]=="|" and mod):
+            mod=False
             lista.append(aux)
-            aux = ""
-        i = i+1
+            aux=""
+        i+=1
     return lista
-
-
-def llenar_matCAFND(nodos, alfabeto, conexiones):
-    M = matE_AFND(alfabeto, nodos)
-    I, A, D = enlaces(conexiones)
-    n = 0
-    while(n < len(I)):
-        if(A[n] != ""):
-            M[buscar_id(I[n], nodos)][buscar_id(A[n], alfabeto)].append(D[n])
-        if(conx_void(D[n], I, A)):
-            aux = caminos_void(D[n], I, A, D)
+def llenar_matCAFND(nodos,alfabeto,conexiones):
+    M=matE_AFND(alfabeto,nodos)
+    I,A,D=enlaces(conexiones)
+    n=0
+    while(n<len(I)):
+        if(A[n]!=None):
+            M[buscar_id(I[n],nodos)][buscar_id(A[n],alfabeto)].append(D[n])
+        if(conx_void(D[n],I,A)):
+            aux=caminos_void(D[n],I,A,D)
             for i in aux:
-                M[buscar_id(I[n], nodos)][buscar_id(A[n], alfabeto)].append(i)
-        if(A[n] == ""):
-            letra = 0
-            while(letra < len(alfabeto)):
-                aux = dest_to_list(buscar_conxVoid(
-                    I[n], alfabeto[letra], I, A, D))
+                M[buscar_id(I[n],nodos)][buscar_id(A[n],alfabeto)].append(i)
+        if(A[n]==""):
+            letra=0
+            while(letra<len(alfabeto)):
+                aux=dest_to_list(buscar_conxVoid(I[n],alfabeto[letra],I,A,D))
                 for i in aux:
-                    M[buscar_id(I[n], nodos)][buscar_id(
-                        alfabeto[letra], alfabeto)].append(i)
-                letra = letra+1
-
-        n = n+1
-    i = 0
-    while(i < len(nodos)):
-        j = 0
-        while(j < len(alfabeto)):
-            M[i][j] = list(OrderedDict.fromkeys(M[i][j]))
-            j += 1
-        i += 1
+                    M[buscar_id(I[n],nodos)][buscar_id(alfabeto[letra],alfabeto)].append(i)
+                letra+=1
+        
+        n=n+1
+    i=0
+    while(i<len(nodos)):
+        j=0
+        while(j<len(alfabeto)):
+            M[i][j]=list(OrderedDict.fromkeys(M[i][j]))
+            j+=1
+        i+=1
     return M
 
-
-def union_nodos(unir):
-    aux = ""
+def unionNodos(unir):
+    aux=""
     for i in unir:
-        aux += i
+        aux+=i
     return aux
 
-
-def separar(nodo, nodos):
-    aux = ""
-    lista = []
-    i = 0
-    while(i < len(nodo)):
-        aux += nodo[i]
+def separar(nodo,nodos):
+    aux=""
+    lista=[]
+    i=0
+    while(i <len(nodo)):
+        aux+=nodo[i]
         if(aux in nodos):
             lista.append(aux)
-            aux = ""
-        i += 1
+            aux=""
+        i+=1
     return lista
 
-
-def cant_destinos(id_nodo, matriz, camino):
+def cant_destinos(id_nodo,matriz,camino):
     return len(matriz[id_nodo][camino])
 
-
-def separar_caminos(conexion, nodos, guia, conexiones):
-    Nnodos = []
-    auxP = []
-    auxC = []
-    auxD = []
+def separar_caminos(conexion,nodos,guia,conexiones):
+    Nnodos=[]
+    auxP=[]
+    auxC=[]
+    auxD=[]
     auxP.append(conexion[0])
-    i = 0
-    while(i < len(conexion[1])-1):
+    i=0
+    while(i<len(conexion[1])-1):
         auxC.append(conexion[1][i])
         auxD.append("zz00"+str(guia))
         if(("zz00"+str(guia)) not in Nnodos):
             Nnodos.append("zz00"+str(guia))
         auxP.append("zz00"+str(guia))
-        guia += 1
-        i += 1
+        guia+=1
+        i+=1
     auxC.append(conexion[1][i])
     auxD.append(conexion[2])
-    Laux = []
-    ConxAUX = decod(auxP, auxC, auxD)
-    i = 0
-    while(i < len(conexiones)):
-        if(conexiones[i] == conexion):
-            j = i+1
-            while(j < len(conexiones)):
+    Laux=[]
+    ConxAUX=decod(auxP,auxC,auxD)
+    i=0
+    while(i<len(conexiones)):
+        if(conexiones[i]==conexion):
+            j=i+1
+            while(j<len(conexiones)):
                 Laux.append(conexiones[j])
-                j += 1
-            while(i < len(conexiones)):
+                j+=1
+            while(i<len(conexiones)):
                 conexiones.pop()
-        i += 1
+        i+=1
     for i in ConxAUX:
         conexiones.append(i)
     for i in Laux:
         conexiones.append(i)
     for i in Nnodos:
         nodos.append(i)
-
-
-def transformacion(alfabeto, nodos, iniciales, finales, conexiones):
-    i = 0
-    guia = 1
-    while(i < len(conexiones)):
-        if(len(conexiones[i][1]) > 1):
-            separar_caminos(conexiones[i], nodos, guia, conexiones)
-        i += 1
-    M = llenar_matCAFND(nodos, alfabeto, conexiones)
-    P, C, D = enlaces(conexiones)
-    nodosAFD = []
-    inicialAFD = []
-    finalesAFD = []
-    conexionesAFD = []
-    Pafd = []
-    Cafd = []
-    Dafd = []
-    inicialAFD.append(union_nodos(iniciales))
-    nodosAFD.append(union_nodos(iniciales))
-    i = 0
-    while(i < len(nodos)):
-        j = 0
-        while(j < len(alfabeto)):
-            if((union_nodos(M[i][j]) not in nodosAFD) and (union_nodos(M[i][j]) != None)):
-                nodosAFD.append(union_nodos(M[i][j]))
-            j += 1
-        i += 1
-    i = 0
-    while(i < len(nodosAFD)):
-        L = separar(nodosAFD[i], nodos)
-        abc = 0
-        while(abc < len(alfabeto)):
-            aux = ""
-            val = False
-            Laux = []
-            Void = []
+    
+def transformacion(alfabeto,nodos,iniciales,finales,conexiones):
+    i=0
+    guia=1
+    while(i<len(conexiones)):
+        if(conexiones[i][1] != None ):
+            if( len(conexiones[i][1])>1):
+                separar_caminos(conexiones[i],nodos,guia,conexiones)
+        i+=1
+    M=llenar_matCAFND(nodos,alfabeto,conexiones)
+    P,C,D=enlaces(conexiones)
+    nodosAFD=[]
+    inicialAFD=[]
+    finalesAFD=[]
+    conexionesAFD=[]
+    Pafd=[]
+    Cafd=[]
+    Dafd=[]
+    inicialAFD.append(unionNodos(iniciales))
+    nodosAFD.append(unionNodos(iniciales))
+    i=0
+    while(i<len(nodos)):
+        j=0
+        while(j<len(alfabeto)):
+            if((unionNodos(M[i][j]) not in nodosAFD) and (unionNodos(M[i][j])!= "")):
+                nodosAFD.append(unionNodos(M[i][j]))
+            j+=1
+        i+=1
+    i=0
+    while(i<len(nodosAFD)):
+        L=separar(nodosAFD[i],nodos)
+        abc=0
+        while(abc<len(alfabeto)):
+            aux=""
+            val=False
+            Laux=[]
+            Void=[]
             for j in L:
-                if(conx_void(buscar_destino(j, alfabeto[abc], P, C, D), P, C)):
-                    Void = caminos_void(buscar_destino(
-                        j, alfabeto[abc], P, C, D), P, C, D)
+                if(conx_void(buscar_destino(j,alfabeto[abc],P,C,D),P,C)):
+                    Void=caminos_void(buscar_destino(j,alfabeto[abc],P,C,D),P,C,D)
                     for k in Void:
                         Laux.append(k)
-                if(buscar_destino(j, alfabeto[abc], P, C, D) != "sumidero"):
-                    Laux.append(buscar_destino(j, alfabeto[abc], P, C, D))
-            Laux = sorted(Laux)
-            Laux = list(OrderedDict.fromkeys(Laux))
+                if(buscar_destino(j,alfabeto[abc],P,C,D)!="sumidero"):
+                    Laux.append(buscar_destino(j,alfabeto[abc],P,C,D))
+            Laux=sorted(Laux)
+            Laux=list(OrderedDict.fromkeys(Laux))
             for k in Laux:
-                aux += k
+                aux+=k
             Pafd.append(nodosAFD[i])
             Cafd.append(alfabeto[abc])
-            if(aux == None):
+            if(aux == ""):
                 Dafd.append("sumidero")
             else:
                 Dafd.append(aux)
-            if((aux not in nodosAFD) and aux != None):
+            if((aux not in nodosAFD) and aux != ""):
                 nodosAFD.append(aux)
-            abc += 1
-        i += 1
-    i = 0
-    while(i < len(nodosAFD)):
-        L = separar(nodosAFD[i], nodos)
+            abc+=1
+        i+=1
+    i=0
+    while(i<len(nodosAFD)):
+        L=separar(nodosAFD[i],nodos)
         for j in L:
             if(j in finales):
                 finalesAFD.append(nodosAFD[i])
-        i += 1
-    finalesAFD = list(OrderedDict.fromkeys(finalesAFD))
-    conexionesAFD = decod(Pafd, Cafd, Dafd)
-    return nodosAFD, inicialAFD, finalesAFD, conexionesAFD
+        i+=1
+    finalesAFD=list(OrderedDict.fromkeys(finalesAFD))
+    conexionesAFD=decod(Pafd,Cafd,Dafd)
+    return nodosAFD,inicialAFD,finalesAFD,conexionesAFD
