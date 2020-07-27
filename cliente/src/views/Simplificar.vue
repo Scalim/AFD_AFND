@@ -1,30 +1,56 @@
 <template>
-  <div class="is-flex" style="width: 100%;">
-    <div
-      class="card"
-      style="width: 100%; height: calc(100vh - 80px - 45px); border-radius: 10px;"
-    >
-      <div class="is-full-h" style="padding: 20px;">
-        <div class="columns is-marginless is-paddingless is-full-h">
-          <div class="column is-paddingless is-7">
-            <stepper
-              :nodos="nodos"
-              :origenes="origenes"
-              :destinos="destinos"
-              :pesos="pesos"
-              :onFinalizar="onFinalizar"
-            />
+  <div class="is-full-h" style="padding: 20px;">
+    <div class="columns is-marginless is-paddingless is-full-h">
+      <div class="column is-6" style="overflow-y: scroll; padding-right: 20px">
+        <h1 class="title is-marginless">Simplificar</h1>
+        <span class="subtitle">Simplificar Autómata Finito Determinista</span>
+
+        <b-button
+          style="margin-top: 20px;"
+          type="is-primary"
+          outlined
+          rounded
+          expanded
+          class="button"
+          :loading="cargando"
+          @click="obtenerArbol()"
+          >Simplificar</b-button
+        >
+      </div>
+
+      <div class="column is-6" style="border-left: 2px solid #f5f5f5; ">
+        <grafo
+          :nodos="$store.state.nodos"
+          :origenes="$store.state.origenes"
+          :destinos="$store.state.destinos"
+          :pesos="$store.state.pesos"
+        />
+        <div class="columns" v-if="resultado != null">
+          <div class="column is-6">
+            <b-button
+              style="margin-top: 20px;"
+              type="is-primary"
+              outlined
+              rounded
+              expanded
+              class="button"
+              :loading="cargando"
+              @click="obtenerArbol()"
+              >Sobreescribir Autómata 1 con este resultado</b-button
+            >
           </div>
-          <div
-            class="column is-paddingless is-5"
-            style="border-left: 2px solid #f5f5f5; "
-          >
-            <grafo
-              :nodos="nodos"
-              :origenes="origenes"
-              :destinos="destinos"
-              :pesos="pesos"
-            />
+          <div class="column is-6">
+            <b-button
+              style="margin-top: 20px;"
+              type="is-primary"
+              outlined
+              rounded
+              expanded
+              class="button"
+              :loading="cargando"
+              @click="obtenerArbol()"
+              >Sobreescribir Autómata 2 con este resultado</b-button
+            >
           </div>
         </div>
       </div>
@@ -33,37 +59,19 @@
 </template>
 
 <script>
-import Stepper from "../components/Stepper.vue";
+import axios from "axios";
 import Grafo from "../components/Grafo.vue";
 
 export default {
-  name: "AFD",
-  props: ["onFinalizar"],
+  name: "MatrizCaminos",
   components: {
-    Stepper,
     Grafo,
   },
   data: () => ({
-    nodos: [],
-    origenes: [],
-    destinos: [],
-    pesos: [],
+    cargando: false,
+    resultado: null,
   }),
-  mounted() {
-    this.nodos = this.$store.state.nodos;
-    this.origenes = this.$store.state.origenes;
-    this.destinos = this.$store.state.destinos;
-    this.pesos = this.$store.state.pesos;
-  },
-  methods: {
-    onFinalizar() {
-      this.$store.commit("crearGrafo", {
-        nodos: this.nodos,
-        origenes: this.origenes,
-        destinos: this.destinos,
-        pesos: this.pesos,
-      });
-    },
-  },
+
+  methods: {},
 };
 </script>
