@@ -85,17 +85,17 @@ export default {
         {
           href: "/operar",
           title: "Operar",
-          icon: "fa fa-route",
+          icon: "fa fa-flask",
         },
         {
           href: "/afd",
           title: "Tranformar a AFD",
-          icon: "fa fa-table",
+          icon: "fa fa-random",
         },
         {
           href: "/simplificar",
           title: "Simplificar",
-          icon: "fa fa-table",
+          icon: "fa fa-compress",
         },
       ],
     };

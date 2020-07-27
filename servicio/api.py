@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
-from servicios import fecha_y_hora, simplificar, operar
+from servicios import fecha_y_hora, simplificar, operar, transformar
 
 application = Flask(__name__)
 cors = CORS(application, resources={r"/foo": {"origins": "*"}})
@@ -25,6 +25,13 @@ def operar_automata():
     print(fecha_y_hora()+"[api.py] operar_automata()")
     content = request.get_json(silent=True)
     return operar(content)
+
+@application.route('/transformar', methods=['POST'])
+@cross_origin(origin='*')
+def transformar_automata():
+    print(fecha_y_hora()+"[api.py] transformar_automata()")
+    content = request.get_json(silent=True)
+    return transformar(content)
 
 if __name__ == '__main__':
     application.run(debug=True, host='localhost', port=5151)
