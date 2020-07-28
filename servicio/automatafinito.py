@@ -1,5 +1,8 @@
 from collections import OrderedDict
-from servicios import fecha_y_hora
+from datetime import datetime
+
+def fecha_y_hora():
+    return '--> '+str(datetime.now(tz=None).replace(microsecond=0))+': '
 
 
 class AutomataFinito:

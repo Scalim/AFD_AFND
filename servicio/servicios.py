@@ -1,10 +1,5 @@
-from datetime import datetime
 from flask import jsonify
-from automatafinito import AutomataFinito
-
-
-def fecha_y_hora():
-    return '--> '+str(datetime.now(tz=None).replace(microsecond=0))+': '
+from automatafinito import AutomataFinito, fecha_y_hora
 
 
 def parsear_automata(automata):
@@ -36,7 +31,6 @@ def simplificar(json):
         return jsonify({
             "eraAfd": True,
             "simplificado": simplificado.convertir_diccionario()
-
         })
 
 
