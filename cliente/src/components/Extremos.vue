@@ -13,15 +13,18 @@
     </div>
     <div class="columns is-mobile" v-for="(nodo, i) in nodos" :key="i">
       <div class="column">
-        <p class="subtitle is-5 is-center">{{ nodo.etiqueta }}</p>
+        <p class="subtitle is-5 is-center">{{ nodo }}</p>
       </div>
       <div class="column">
-        <b-radio name="inicial" v-model="inicialActual[0]" :native-value="i"
+        <b-radio
+          name="inicial"
+          v-model="inicialesActual[0]"
+          :native-value="nodo"
           >Inicial</b-radio
         >
       </div>
       <div class="column">
-        <b-switch v-model="finales[i]">Final</b-switch>
+        <b-switch v-model="finalesBoleanos[i]">Final</b-switch>
       </div>
     </div>
   </div>
@@ -33,41 +36,60 @@ export default {
   data() {
     return {
       cantidad: 0,
-      inicialActual: [],
-      primero: true
+      finalesBoleanos: [],
+      inicialesActual: [],
+      primero: true,
     };
   },
   mounted() {
-    if(this.nodos.length != 0 && this.primero){
+    for (let i = 0; i < this.cantidad; i++) {
+      this.finalesBoleanos[i] = false;
+    }
+
+    if (this.nodos.length != 0 && this.primero) {
       this.cantidad = this.nodos.length;
-      this.inicialActual = this.iniciales;
+      this.inicialesActual = this.iniciales;
+      let finalesBooleanosCopia = [...this.finalesBooleanos];
+      for (const final of this.finales) {
+        finalesBooleanosCopia[this.nodos.indexOf(final)] = true;
+      }
+      this.finalesBoleanos = finalesBooleanosCopia;
       this.primero = false;
     }
   },
   watch: {
-    nodos (){
-      if(this.nodos.length != 0 && this.primero){
+    finalesBoleanos(val) {
+      while (this.finales.length) {
+        this.finales.pop();
+      }
+
+      for (let i = 0; i < val.length; i++) {
+        const esFinal = val[i];
+        if (esFinal) {
+          this.finales.push(this.nodos[i]);
+        }
+      }
+    },
+    nodos() {
+      if (this.nodos.length != 0 && this.primero) {
         this.cantidad = this.nodos.length;
-        this.inicialActual = this.iniciales;
+        this.inicialesActual = this.iniciales;
         this.primero = false;
       }
     },
     inicialActual() {
-      this.iniciales = this.inicialActual;
+      this.iniciales = this.inicialesActual;
     },
     cantidad: function() {
       if (this.cantidad > this.nodos.length) {
-        this.nodos.push({
-          id: this.nodos.length,
-          etiqueta: `Q${this.nodos.length}`,
-        });
-        this.finales.push(false);
+        this.nodos.push(`Q${this.nodos.length + 1}`);
+        this.finalesBoleanos.push(false);
       } else if (this.cantidad < this.nodos.length) {
         this.nodos.pop();
-        this.finales.pop();
-        if (this.inicialActual[0] >= this.nodos.length) {
-          this.inicialActual = [];
-        }
+        this.finales = this.finales.filter((f) => this.nodos.indexOf(f) != -1);
+        this.inicialesActual = this.inicialesActual.filter(
+          (i) => this.nodos.indexOf(i) != -1
+        );
       }
     },
   },

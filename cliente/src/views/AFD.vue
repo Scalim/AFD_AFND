@@ -8,7 +8,17 @@
           Determinista</span
         >
 
-        <b-field expanded label="Autómata">
+        <p v-if="eraAfd != null" style="padding: 20px 0 20px 0;">
+          {{
+            `El autómata ${eraAfd ? "NO" : "ya"} era AFD ${
+              eraAfd
+                ? "y se transformó correctamente"
+                : "por lo que no se transformó"
+            }`
+          }}
+        </p>
+
+        <b-field expanded label="Autómata" style="margin-top: 20px;">
           <b-select
             expanded
             placeholder="Selecciona un autómata"
@@ -17,6 +27,11 @@
             <option
               v-for="(automata, i) in automatas"
               :value="automata"
+              :disabled="
+                i == 0
+                  ? $store.state.automataUnoEsVacio
+                  : $store.state.automataDosEsVacio
+              "
               :key="i"
             >
               {{ automata }}
@@ -37,14 +52,12 @@
         >
       </div>
 
-      <div class="column is-6" style="border-left: 2px solid #f5f5f5; ">
-        <grafo
-          :nodos="$store.state.nodos"
-          :origenes="$store.state.origenes"
-          :destinos="$store.state.destinos"
-          :pesos="$store.state.pesos"
-        />
-        <div class="columns" v-if="afd != null">
+      <div
+        class="column is-6"
+        style="border-left: 2px solid #f5f5f5; "
+        v-if="afd != null"
+      >
+        <div class="columns">
           <div class="column is-6">
             <b-button
               style="margin-top: 20px;"
@@ -55,7 +68,7 @@
               class="button"
               :loading="cargando"
               @click="sobreescribir(1)"
-              >Sobreescribir Autómata 1 con este resultado</b-button
+              >Sobreescribir Autómata 1</b-button
             >
           </div>
           <div class="column is-6">
@@ -67,11 +80,12 @@
               expanded
               class="button"
               :loading="cargando"
-              @click="sobreescribir(1)"
-              >Sobreescribir Autómata 2 con este resultado</b-button
+              @click="sobreescribir(2)"
+              >Sobreescribir Autómata 2</b-button
             >
           </div>
         </div>
+        <grafo :quintupla="afd" />
       </div>
     </div>
   </div>
@@ -95,7 +109,14 @@ export default {
   }),
 
   methods: {
-    sobreescribir(index) {},
+    sobreescribir(index) {
+      if (index == 1) {
+        this.$store.commit("crearAutomataUno", this.afd);
+      }
+      if (index == 2) {
+        this.$store.commit("crearAutomataDos", this.afd);
+      }
+    },
     transformar() {
       this.cargando = true;
       var data;

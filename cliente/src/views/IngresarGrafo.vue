@@ -8,10 +8,8 @@
         <div class="columns is-marginless is-paddingless is-full-h">
           <div class="column is-paddingless is-7">
             <stepper
-              :nodos="nodos"
-              :origenes="origenes"
-              :destinos="destinos"
               :conexiones="conexiones"
+              :nodos="nodos"
               :alfabeto="alfabeto"
               :iniciales="iniciales"
               :finales="finales"
@@ -22,14 +20,7 @@
             class="column is-paddingless is-5"
             style="border-left: 2px solid #f5f5f5; "
           >
-            <grafo
-              :nodos="nodos"
-              :origenes="origenes"
-              :destinos="destinos"
-              :finales="finales"
-              :iniciales="iniciales"
-              :conexiones="conexiones"
-            />
+            <grafo :quintupla="quintupla" />
           </div>
         </div>
       </div>
@@ -48,80 +39,74 @@ export default {
     Stepper,
     Grafo,
   },
-  data: () => ({
-    nodos: [],
-    origenes: [],
-    destinos: [],
-    conexiones: [],
-    iniciales: [],
-    finales: [],
-    alfabeto: [],
-  }),
+  data() {
+    return {
+      nodos: [],
+      iniciales: [],
+      alfabeto: [],
+      finales: [],
+      conexiones: [],
+    };
+  },
+  computed: {
+    quintupla() {
+      return {
+        K: this.nodos,
+        S: this.iniciales,
+        E: this.alfabeto,
+        F: this.finales,
+        s: this.conexiones,
+      };
+    },
+  },
   mounted() {
-    if (this.grafoSeleccionado == 1) {
-      this.nodos = this.$store.state.nodosUno;
-      this.origenes = this.$store.state.origenesUno;
-      this.destinos = this.$store.state.destinosUno;
-      this.conexiones = this.$store.state.conexionesUno;
-      this.alfabeto = this.$store.state.alfabetoUno;
-      this.iniciales = this.$store.state.inicialesUno;
-      this.finales = this.$store.state.finalesUno;
-    }
-    if (this.grafoSeleccionado == 2) {
-      this.nodos = this.$store.state.nodosDos;
-      this.origenes = this.$store.state.origenesDos;
-      this.destinos = this.$store.state.destinosDos;
-      this.conexiones = this.$store.state.conexionesDos;
-      this.alfabeto = this.$store.state.alfabetoDos;
-      this.iniciales = this.$store.state.inicialesDos;
-      this.finales = this.$store.state.finalesDos;
+    if (this.grafoSeleccionado == 1 && !this.$store.state.automataUnoEsVacio) {
+      this.nodos = this.$store.state.automataUno.K;
+      this.iniciales = this.$store.state.automataUno.S;
+      this.alfabeto = this.$store.state.automataUno.E;
+      this.finales = this.$store.state.automataUno.F;
+      this.conexiones = this.$store.state.automataUno.s;
+    } else if (
+      this.grafoSeleccionado == 2 &&
+      !this.$store.state.automataDosEsVacio
+    ) {
+      this.nodos = this.$store.state.automataDos.K;
+      this.iniciales = this.$store.state.automataDos.S;
+      this.alfabeto = this.$store.state.automataDos.E;
+      this.finales = this.$store.state.automataDos.F;
+      this.conexiones = this.$store.state.automataDos.s;
     }
   },
   watch: {
-    grafoSeleccionado: function () {
-      if (this.grafoSeleccionado == 1) {
-        this.nodos = this.$store.state.nodosUno;
-        this.origenes = this.$store.state.origenesUno;
-        this.destinos = this.$store.state.destinosUno;
-        this.conexiones = this.$store.state.conexionesUno;
-        this.alfabeto = this.$store.state.alfabetoUno;
-        this.iniciales = this.$store.state.inicialesUno;
-        this.finales = this.$store.state.finalesUno;
+    grafoSeleccionado: function() {
+      if (
+        this.grafoSeleccionado == 1 &&
+        !this.$store.state.automataUnoEsVacio
+      ) {
+        this.nodos = this.$store.state.automataUno.K;
+        this.iniciales = this.$store.state.automataUno.S;
+        this.alfabeto = this.$store.state.automataUno.E;
+        this.finales = this.$store.state.automataUno.F;
+        this.conexiones = this.$store.state.automataUno.s;
+      } else if (
+        this.grafoSeleccionado == 2 &&
+        !this.$store.state.automataDosEsVacio
+      ) {
+        this.nodos = this.$store.state.automataDos.K;
+        this.iniciales = this.$store.state.automataDos.S;
+        this.alfabeto = this.$store.state.automataDos.E;
+        this.finales = this.$store.state.automataDos.F;
+        this.conexiones = this.$store.state.automataDos.s;
       }
-      if (this.grafoSeleccionado == 2) {
-        this.nodos = this.$store.state.nodosDos;
-        this.origenes = this.$store.state.origenesDos;
-        this.destinos = this.$store.state.destinosDos;
-        this.conexiones = this.$store.state.conexionesDos;
-        this.alfabeto = this.$store.state.alfabetoDos;
-        this.iniciales = this.$store.state.inicialesDos;
-        this.finales = this.$store.state.finalesDos;
-      }
-    }
+    },
   },
   methods: {
     onFinalizar() {
       if (this.grafoSeleccionado == 1) {
-        this.$store.commit("crearAutomataUno", {
-          nodos: this.nodos,
-          origenes: this.origenes,
-          destinos: this.destinos,
-          conexiones: this.conexiones,
-          alfabeto: this.alfabeto,
-          iniciales: this.iniciales,
-          finales: this.finales
-        });
+        this.$store.commit("crearAutomataUno", this.quintupla);
       }
       if (this.grafoSeleccionado == 2) {
-        this.$store.commit("crearAutomataDos", {
-          nodos: this.nodos,
-          origenes: this.origenes,
-          destinos: this.destinos,
-          conexiones: this.conexiones,
-          alfabeto: this.alfabeto,
-          iniciales: this.iniciales,
-          finales: this.finales
-        });
+        this.$store.commit("crearAutomataDos", this.quintupla);
       }
       this.onGuardar();
     },

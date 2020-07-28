@@ -3,7 +3,7 @@
     <div class="columns is-marginless is-paddingless is-full-h">
       <div class="column" style="padding-right: 20px">
         <b-field
-          v-for="(origen, i) in origenes"
+          v-for="(conexion, i) in conexiones"
           :key="i"
           :type="validarArista(i) != null ? 'is-danger' : ''"
           :message="validarArista(i)"
@@ -12,11 +12,10 @@
             <b-field expanded style="margin-bottom: 5px;">
               <b-autocomplete
                 rounded
-                v-model="origenes[i]"
+                v-model="conexiones[i][0]"
                 :data="nodos"
                 keep-first
                 open-on-focus
-                field="etiqueta"
                 placeholder="Nodo de origen"
                 clearable
               >
@@ -26,11 +25,10 @@
             <b-field expanded style="margin-bottom: 5px;">
               <b-autocomplete
                 rounded
-                v-model="destinos[i]"
+                v-model="conexiones[i][2]"
                 :data="nodos"
                 keep-first
                 open-on-focus
-                field="etiqueta"
                 placeholder="Nodo de destino"
                 clearable
               >
@@ -43,8 +41,7 @@
                 :data="alfabeto"
                 keep-first
                 open-on-focus
-                v-model="conexiones[i]"
-                field="etiqueta"
+                v-model="conexiones[i][1]"
                 placeholder="Ɛ"
                 clearable
               >
@@ -72,7 +69,7 @@
                 <v-btn
                   icon
                   color="error"
-                  :disabled="origenes.length <= 1"
+                  :disabled="conexiones.length <= 1"
                   @click="eliminarArista(i)"
                   v-bind="attrs"
                   v-on="on"
@@ -118,12 +115,11 @@
 <script>
 export default {
   name: "AristasInput",
-  props: ["nodos", "origenes", "conexiones", "destinos", "alfabeto"],
+  props: ["nodos", "conexiones", "alfabeto"],
   data: () => ({}),
-  mounted() {},
   computed: {
     sonTodosValidos() {
-      for (let i = 0; i < this.origenes.length; i++) {
+      for (let i = 0; i < this.conexiones.length; i++) {
         if (this.validarArista(i).length) {
           return false;
         }
@@ -133,36 +129,32 @@ export default {
   },
   methods: {
     agregarArista() {
-      this.origenes.push(null);
-      this.destinos.push(null);
-      this.conexiones.push(null);
+      this.conexiones.push([null, null, null]);
     },
     eliminarArista(i) {
-      this.origenes.splice(i, 1);
-      this.destinos.splice(i, 1);
       this.conexiones.splice(i, 1);
     },
     invertirArista(i) {
-      this.origenes.push(this.destinos[i]);
-      this.destinos.push(this.origenes[i]);
-      this.conexiones.push(this.conexiones[i]);
+      const conexion = this.conexiones[i];
+      this.conexiones.push(conexion[2], conexion[1], conexion[0]);
     },
     validarArista(i) {
-      const origen = this.origenes[i];
-      const destino = this.destinos[i];
       const conexion = this.conexiones[i];
+
+      const origen = conexion[0];
+      const destino = conexion[2];
 
       var errores = [];
 
       if (!origen || origen == "") {
         errores.push("Debe seleccion un nodo de origen");
-      } else if (!this.nodos.filter((n) => n.etiqueta == origen).length) {
+      } else if (this.nodos.indexOf(origen) == -1) {
         errores.push("Debe seleccion un nodo de origen válido");
       }
 
       if (!destino || destino == "") {
         errores.push("Debe seleccion un nodo de destino");
-      } else if (!this.nodos.filter((n) => n.etiqueta == destino).length) {
+      } else if (this.nodos.indexOf(destino) == -1) {
         errores.push("Debe seleccion un nodo de destino válido");
       }
       return errores;

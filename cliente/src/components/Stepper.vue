@@ -43,8 +43,6 @@
       >
         <aristas-input
           :nodos="nodos"
-          :origenes="origenes"
-          :destinos="destinos"
           :conexiones="conexiones"
           :alfabeto="alfabeto"
         />
@@ -99,12 +97,10 @@ import Alfabeto from "./Alfabeto";
 export default {
   name: "StepperData",
   props: [
-    "nodos",
-    "origenes",
-    "destinos",
+    "conexiones",
     "finales",
     "iniciales",
-    "conexiones",
+    "nodos",
     "alfabeto",
     "onFinalizar",
   ],
@@ -122,18 +118,13 @@ export default {
     };
   },
   mounted() {},
-  watch: {
-    alfabeto() {
-    },
-  },
   computed: {
     puedeAvanzar() {
       if (this.pasoActual == 0) {
         return this.alfabeto.length > 0;
       }
       if (this.pasoActual == 1) {
-        let tieneInicial =
-          this.iniciales[0] != null && this.iniciales[0] < this.nodos.length;
+        let tieneInicial = this.iniciales[0] != null && this.iniciales[0];
         let tieneFinal = false;
 
         for (const final of this.finales) {
@@ -149,12 +140,10 @@ export default {
       }
 
       for (const nodo of this.nodos) {
-        if (!nodo.etiqueta || nodo.etiqueta == "") {
+        if (!nodo || nodo == "") {
           return false;
         } else {
-          if (
-            this.nodos.filter((n) => n.etiqueta == nodo.etiqueta).length > 1
-          ) {
+          if (this.nodos.filter((n) => n == nodo).length > 1) {
             return false;
           }
         }
