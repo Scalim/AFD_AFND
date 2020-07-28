@@ -4,7 +4,12 @@ from servicios import fecha_y_hora, simplificar, operar, transformar
 
 application = Flask(__name__)
 cors = CORS(application, resources={r"/foo": {"origins": "*"}})
-application.config['CORS_HEADERS'] = 'Content-Type'
+# application.config['CORS_HEADERS'] = 'Content-Type'
+application.config.update(
+    WTF_CSRF_ENABLED = True,
+    SECRET_KEY = 'amo-los-grafos'
+    CORS_HEADERS = 'Content-Type'
+)
 
 @application.route('/', methods=['GET'])
 @cross_origin(origin='*')
