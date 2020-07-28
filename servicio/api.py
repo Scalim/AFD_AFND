@@ -5,19 +5,17 @@ from automatafinito import fecha_y_hora
 
 
 application = Flask(__name__)
-cors = CORS(application, resources={r"/foo": {"origins": ["http://localhost:8080", "http://localhost:8081"]}})
+cors = CORS(application, resources={r"/*": {"resources": ["http://localhost:8080", "http://localhost:8081"]}})
 application.config['CORS_HEADERS'] = 'Content-Type'
 
 
 @application.route('/', methods=['GET'])
-@cross_origin(origin='*')
 def conectar():
     print(fecha_y_hora()+"[api.py] conectar()")
     return jsonify(mensaje='Conectado a servicio')
 
 
 @application.route('/simplificar', methods=['POST'])
-@cross_origin(origin='*')
 def simplificar_automata():
     print(fecha_y_hora()+"[api.py] simplificar_automata()")
     content = request.get_json(silent=True)
@@ -25,7 +23,6 @@ def simplificar_automata():
 
 
 @application.route('/operar', methods=['POST'])
-@cross_origin(origin='*')
 def operar_automata():
     print(fecha_y_hora()+"[api.py] operar_automata()")
     content = request.get_json(silent=True)
@@ -33,7 +30,6 @@ def operar_automata():
 
 
 @application.route('/transformar', methods=['POST'])
-@cross_origin(origin='*')
 def transformar_automata():
     print(fecha_y_hora()+"[api.py] transformar_automata()")
     content = request.get_json(silent=True)
