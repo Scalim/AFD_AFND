@@ -88,7 +88,7 @@
               expanded
               class="button"
               :loading="cargando"
-              @click="obtener()"
+              @click="sobreescribir()"
               >Sobreescribir Autómata 1 con este resultado</b-button
             >
           </div>
@@ -101,7 +101,7 @@
               expanded
               class="button"
               :loading="cargando"
-              @click="obtener()"
+              @click="sobreescribir()"
               >Sobreescribir Autómata 2 con este resultado</b-button
             >
           </div>
@@ -129,32 +129,75 @@ export default {
     operacion: null,
   }),
   methods: {
+    sobreescribir(automata){
+      if(automata == 1){
+        this.$store.commit("crearAutomataUno", {
+
+        });
+      } else {
+        this.$store.commit("crearAutomataDos", {
+
+        })
+      }
+    },
     obtener(){
       var automataUno;
       var automataDos;
+      var nombre;
+      var data;
+
       if(this.operaciones.indexOf(this.operacion) == 0){
+        nombre = "complemento";
         if(this.automatas.indexOf(this.automataX) == 0){
-          automataUno = this.$store.getters.automataUno;
+          data = [this.$store.getters.automataUno];
+        } else {
+          data = [this.$store.getters.automataDos];
         }
       } else if (this.operaciones.indexOf(this.operacion) == 1){
-        if(this.automatas.indexOf(this.automataX) == 0){
-          automataUno = this.$store.getters.automataUno;
+        nombre = "union";
+        if(this.automatas.indexOf(this.automataX) == 0 && this.automatas.indexOf(this.automataY) == 0){
+          data = [this.$store.getters.automataUno, this.$store.getters.automataUno];
+        } else if(this.automatas.indexOf(this.automataX) == 0 && this.automatas.indexOf(this.automataY) == 1){
+          data = [this.$store.getters.automataUno, this.$store.getters.automataDos];
+        } else if(this.automatas.indexOf(this.automataX) == 1 && this.automatas.indexOf(this.automataY) == 0){
+          data = [this.$store.getters.automataDos, this.$store.getters.automataUno];
         } else {
-          automataDos = this.$store.getters.automataDos;
+          data = [this.$store.getters.automataDos, this.$store.getters.automataDos];
         }
       } else if (this.operaciones.indexOf(this.operacion) == 2){
-        if(this.automatas.indexOf(this.automataX) == 0){
-          automataUno = this.$store.getters.automataUno;
+        nombre = "concatenacion";
+        if(this.automatas.indexOf(this.automataX) == 0 && this.automatas.indexOf(this.automataY) == 0){
+          data = [this.$store.getters.automataUno, this.$store.getters.automataUno];
+        } else if(this.automatas.indexOf(this.automataX) == 0 && this.automatas.indexOf(this.automataY) == 1){
+          data = [this.$store.getters.automataUno, this.$store.getters.automataDos];
+        } else if(this.automatas.indexOf(this.automataX) == 1 && this.automatas.indexOf(this.automataY) == 0){
+          data = [this.$store.getters.automataDos, this.$store.getters.automataUno];
         } else {
-          automataDos = this.$store.getters.automataDos;
+          data = [this.$store.getters.automataDos, this.$store.getters.automataDos];
         }
       } else {
-        if(this.automatas.indexOf(this.automataX) == 0){
-          automataUno = this.$store.getters.automataUno;
+        nombre = "interseccion";
+        if(this.automatas.indexOf(this.automataX) == 0 && this.automatas.indexOf(this.automataY) == 0){
+          data = [this.$store.getters.automataUno, this.$store.getters.automataUno];
+        } else if(this.automatas.indexOf(this.automataX) == 0 && this.automatas.indexOf(this.automataY) == 1){
+          data = [this.$store.getters.automataUno, this.$store.getters.automataDos];
+        } else if(this.automatas.indexOf(this.automataX) == 1 && this.automatas.indexOf(this.automataY) == 0){
+          data = [this.$store.getters.automataDos, this.$store.getters.automataUno];
         } else {
-          automataDos = this.$store.getters.automataDos;
+          data = [this.$store.getters.automataDos, this.$store.getters.automataDos];
         }
       }
+      axios.post(`${this.$apiUrl}/operar`,{
+        'operacion': nombre,
+        'automatas': data
+      })
+      .then( r => {
+        console.log("RESULTADO: ", r.data);
+        this.resultado = r.data;
+      })
+      .catch(e => {
+        console.log(e);
+      })
     }
   },
 };
