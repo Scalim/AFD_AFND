@@ -15,6 +15,7 @@
               :alfabeto="alfabeto"
               :iniciales="iniciales"
               :finales="finales"
+              :indiceInicio="indiceInicio"
               :onFinalizar="onFinalizar"
             />
           </div>
@@ -56,6 +57,7 @@ export default {
     iniciales: [],
     finales: [],
     alfabeto: [],
+    indiceInicio: null,
   }),
   mounted() {
     if (this.grafoSeleccionado == 1) {
@@ -66,6 +68,7 @@ export default {
       this.alfabeto = this.$store.state.alfabetoUno;
       this.iniciales = this.$store.state.inicialesUno;
       this.finales = this.$store.state.finalesUno;
+        this.indiceInicio = 'Q';
     }
     if (this.grafoSeleccionado == 2) {
       this.nodos = this.$store.state.nodosDos;
@@ -75,6 +78,7 @@ export default {
       this.alfabeto = this.$store.state.alfabetoDos;
       this.iniciales = this.$store.state.inicialesDos;
       this.finales = this.$store.state.finalesDos;
+       this.indiceInicio = 'P';
     }
   },
   watch: {
@@ -87,6 +91,7 @@ export default {
         this.alfabeto = this.$store.state.alfabetoUno;
         this.iniciales = this.$store.state.inicialesUno;
         this.finales = this.$store.state.finalesUno;
+        this.indiceInicio = 'Q';
       }
       if (this.grafoSeleccionado == 2) {
         this.nodos = this.$store.state.nodosDos;
@@ -96,6 +101,7 @@ export default {
         this.alfabeto = this.$store.state.alfabetoDos;
         this.iniciales = this.$store.state.inicialesDos;
         this.finales = this.$store.state.finalesDos;
+        this.indiceInicio = 'P';
       }
     }
   },

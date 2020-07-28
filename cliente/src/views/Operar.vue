@@ -66,7 +66,7 @@
           expanded
           class="button"
           :loading="cargando"
-          @click="obtenerArbol()"
+          @click="obtener()"
           >Operar</b-button
         >
       </div>
@@ -88,7 +88,7 @@
               expanded
               class="button"
               :loading="cargando"
-              @click="obtenerArbol()"
+              @click="obtener()"
               >Sobreescribir Autómata 1 con este resultado</b-button
             >
           </div>
@@ -101,7 +101,7 @@
               expanded
               class="button"
               :loading="cargando"
-              @click="obtenerArbol()"
+              @click="obtener()"
               >Sobreescribir Autómata 2 con este resultado</b-button
             >
           </div>
@@ -116,7 +116,6 @@ import axios from "axios";
 import Grafo from "../components/Grafo.vue";
 
 export default {
-  name: "MatrizCaminos",
   components: {
     Grafo,
   },
@@ -129,7 +128,34 @@ export default {
     automataY: null,
     operacion: null,
   }),
-
-  methods: {},
+  methods: {
+    obtener(){
+      var automataUno;
+      var automataDos;
+      if(this.operaciones.indexOf(this.operacion) == 0){
+        if(this.automatas.indexOf(this.automataX) == 0){
+          automataUno = this.$store.getters.automataUno;
+        }
+      } else if (this.operaciones.indexOf(this.operacion) == 1){
+        if(this.automatas.indexOf(this.automataX) == 0){
+          automataUno = this.$store.getters.automataUno;
+        } else {
+          automataDos = this.$store.getters.automataDos;
+        }
+      } else if (this.operaciones.indexOf(this.operacion) == 2){
+        if(this.automatas.indexOf(this.automataX) == 0){
+          automataUno = this.$store.getters.automataUno;
+        } else {
+          automataDos = this.$store.getters.automataDos;
+        }
+      } else {
+        if(this.automatas.indexOf(this.automataX) == 0){
+          automataUno = this.$store.getters.automataUno;
+        } else {
+          automataDos = this.$store.getters.automataDos;
+        }
+      }
+    }
+  },
 };
 </script>

@@ -16,7 +16,7 @@
           expanded
           class="button"
           :loading="cargando"
-          @click="obtenerArbol()"
+          @click="obtener()"
           >Transformar</b-button
         >
       </div>
@@ -38,7 +38,7 @@
               expanded
               class="button"
               :loading="cargando"
-              @click="obtenerArbol()"
+              @click="sobreescribir(1)"
               >Sobreescribir Autómata 1 con este resultado</b-button
             >
           </div>
@@ -51,7 +51,7 @@
               expanded
               class="button"
               :loading="cargando"
-              @click="obtenerArbol()"
+              @click="sobreescribir(2)"
               >Sobreescribir Autómata 2 con este resultado</b-button
             >
           </div>
@@ -66,7 +66,6 @@ import axios from "axios";
 import Grafo from "../components/Grafo.vue";
 
 export default {
-  name: "MatrizCaminos",
   components: {
     Grafo,
   },
@@ -75,6 +74,23 @@ export default {
     afd: null,
   }),
 
-  methods: {},
+  methods: {
+    obtener(){
+      var automataUno = this.$store.getters.automataUno;
+      var automataDos = this.$store.getters.automataDos;
+      
+    },
+    sobreescribir(automata){
+      if(automata == 1){
+        this.$store.commit("crearAutomataUno", {
+
+        });
+      } else {
+        this.$store.commit("crearAutomataDos", {
+
+        })
+      }
+    }
+  },
 };
 </script>

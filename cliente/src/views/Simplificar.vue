@@ -35,7 +35,7 @@
               expanded
               class="button"
               :loading="cargando"
-              @click="obtenerArbol()"
+              @click="sobreescribir(1)"
               >Sobreescribir Autómata 1 con este resultado</b-button
             >
           </div>
@@ -48,7 +48,7 @@
               expanded
               class="button"
               :loading="cargando"
-              @click="obtenerArbol()"
+              @click="sobreescribir(2)"
               >Sobreescribir Autómata 2 con este resultado</b-button
             >
           </div>
@@ -63,7 +63,6 @@ import axios from "axios";
 import Grafo from "../components/Grafo.vue";
 
 export default {
-  name: "MatrizCaminos",
   components: {
     Grafo,
   },
@@ -71,7 +70,18 @@ export default {
     cargando: false,
     resultado: null,
   }),
+  methods: {
+    sobreescribir(automata){
+      if(automata == 1){
+        this.$store.commit("crearAutomataUno", {
 
-  methods: {},
+        });
+      } else {
+        this.$store.commit("crearAutomataDos", {
+
+        })
+      }
+    }
+  },
 };
 </script>

@@ -29,10 +29,11 @@
 <script>
 export default {
   name: "Extremos",
-  props: ["nodos", "finales", "iniciales"],
+  props: ["nodos", "finales", "iniciales", "indiceInicio"],
   data() {
     return {
       cantidad: 0,
+      inicioEtiqueta: null,
       inicialActual: [],
       primero: true
     };
@@ -45,6 +46,9 @@ export default {
     }
   },
   watch: {
+    indiceInicio(){
+      this.inicioEtiqueta = this.indiceInicio;
+    },
     nodos (){
       if(this.nodos.length != 0 && this.primero){
         this.cantidad = this.nodos.length;
@@ -57,9 +61,10 @@ export default {
     },
     cantidad: function() {
       if (this.cantidad > this.nodos.length) {
+        console.log("INDICE", this.inicioEtiqueta);
         this.nodos.push({
           id: this.nodos.length,
-          etiqueta: `Q${this.nodos.length}`,
+          etiqueta: `${this.inicioEtiqueta == 'Q' ? 'Q' : 'P'}${this.nodos.length}`,
         });
         this.finales.push(false);
       } else if (this.cantidad < this.nodos.length) {

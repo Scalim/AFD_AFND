@@ -31,6 +31,7 @@
           :nodos="nodos"
           :finales="finales"
           :iniciales="iniciales"
+          :indiceInicio="indiceInicio"
         ></extremos>
       </b-step-item>
 
@@ -106,6 +107,7 @@ export default {
     "iniciales",
     "conexiones",
     "alfabeto",
+    "indiceInicio",
     "onFinalizar",
   ],
   components: {
