@@ -40,16 +40,19 @@ const store = new Vuex.Store({
     },
     getters: {
         automataUno: state => {
-            return state.automataUno;
+            return JSON.parse(localStorage.getItem("automataUno"));
         },
         automataUnoEsVacio: state => {
-            return state.automataUno == null || state.automataUno == vacio;
+
+            return state.automataUno.E == [] && state.automataUno.K == [] && state.automataUno.F == [] && state.automataUno.S == [] && state.automataUno.s == [];
         },
         automataDos: state => {
-            return state.automataDos;
+
+            return JSON.parse(localStorage.getItem("automataDos"));
         },
         automataDosEsVacio: state => {
-            return state.automataDos == null || state.automataDos == vacio;
+            console.log(state.automataDos.E, state.automataDos.K, state.automataDos.F, state.automataDos.K, state.automataDos.S, state.automataDos.s)
+            return state.automataDos.E == [] && state.automataDos.K == [] && state.automataDos.F == [] && state.automataDos.S == [] && state.automataDos.s == [];
         },
     }
 });

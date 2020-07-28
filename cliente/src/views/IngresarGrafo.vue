@@ -82,7 +82,7 @@ export default {
     grafoSeleccionado: function() {
       if (
         this.grafoSeleccionado == 1 &&
-        !this.$store.state.automataUnoEsVacio
+        !this.$store.getters.automataUnoEsVacio
       ) {
         this.nodos = this.$store.state.automataUno.K;
         this.iniciales = this.$store.state.automataUno.S;
@@ -91,7 +91,7 @@ export default {
         this.conexiones = this.$store.state.automataUno.s;
       } else if (
         this.grafoSeleccionado == 2 &&
-        !this.$store.state.automataDosEsVacio
+        !this.$store.getters.automataDosEsVacio
       ) {
         this.nodos = this.$store.state.automataDos.K;
         this.iniciales = this.$store.state.automataDos.S;

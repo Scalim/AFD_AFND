@@ -10,7 +10,7 @@
 
         <p v-if="eraAfd != null" style="padding: 20px 0 20px 0;">
           {{
-            `El autómata ${eraAfd ? "ya" : "No"} era AFD ${
+            `El autómata ${eraAfd ? "ya" : "NO"} era AFD ${
               !eraAfd
                 ? "y se transformó correctamente"
                 : "por lo que no se transformó"
@@ -28,9 +28,8 @@
               v-for="(automata, i) in automatas"
               :value="automata"
               :disabled="
-                i == 0
-                  ? $store.state.automataUnoEsVacio
-                  : $store.state.automataDosEsVacio
+                (i == 0 && $store.getters.automataUnoEsVacio) ||
+                  (i == 1 && $store.getters.automataDosEsVacio)
               "
               :key="i"
             >
