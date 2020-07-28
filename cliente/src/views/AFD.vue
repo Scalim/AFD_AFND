@@ -8,6 +8,22 @@
           Determinista</span
         >
 
+        <b-field expanded label="Autómata">
+          <b-select
+            expanded
+            placeholder="Selecciona un autómata"
+            v-model="automata"
+          >
+            <option
+              v-for="(automata, i) in automatas"
+              :value="automata"
+              :key="i"
+            >
+              {{ automata }}
+            </option>
+          </b-select>
+        </b-field>
+
         <b-button
           style="margin-top: 20px;"
           type="is-primary"
@@ -16,7 +32,7 @@
           expanded
           class="button"
           :loading="cargando"
-          @click="obtener()"
+          @click="transformar()"
           >Transformar</b-button
         >
       </div>
@@ -51,7 +67,7 @@
               expanded
               class="button"
               :loading="cargando"
-              @click="sobreescribir(2)"
+              @click="sobreescribir(1)"
               >Sobreescribir Autómata 2 con este resultado</b-button
             >
           </div>
@@ -71,26 +87,37 @@ export default {
   },
   data: () => ({
     cargando: false,
+    eraAfd: null,
+    automatas: ["Autómata 1", "Autómata 2"],
+    automata: null,
     afd: null,
   }),
 
   methods: {
-    obtener(){
-      var automataUno = this.$store.getters.automataUno;
-      var automataDos = this.$store.getters.automataDos;
-      
-    },
-    sobreescribir(automata){
-      if(automata == 1){
-        this.$store.commit("crearAutomataUno", {
-
-        });
+    sobreescribir(index) {},
+    transformar() {
+      this.cargando = true;
+      var data;
+      if (this.automata == "Autómata 1") {
+        data = this.$store.getters.automataUno;
       } else {
-        this.$store.commit("crearAutomataDos", {
-
-        })
+        data = this.$store.getters.automataDos;
       }
-    }
+
+      axios({
+        method: "post",
+        url: this.$apiUrl + "/transformar",
+        data: data,
+      })
+        .then((r) => {
+          this.cargando = false;
+          this.afd = r.data.transformado;
+          this.eraAfd = r.data.eraAfd;
+        })
+        .catch((e) => {
+          this.cargando = false;
+        });
+    },
   },
 };
 </script>

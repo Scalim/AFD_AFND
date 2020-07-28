@@ -131,15 +131,15 @@ const store = new Vuex.Store({
         automataUno: state => {
             var E = [];
             var K = state.alfabetoUno;
-            var S = state.nodosUno[state.inicialesUno[0]].etiqueta;
+            var S = [state.nodosUno[state.inicialesUno[0]].etiqueta];
             var F = [];
             var s = [];
 
-            for (let i = 0; i < state.nodosUno.length; i++){
+            for (let i = 0; i < state.nodosUno.length; i++) {
                 const final = state.finalesUno[i];
                 const nodo = state.nodosUno[i].etiqueta;
                 E.push(nodo);
-                if(final){
+                if (final) {
                     F.push(nodo);
                 }
             }
@@ -151,21 +151,27 @@ const store = new Vuex.Store({
 
                 s.push([origen, conexion, destino]);
             }
-            return { E, K, S, F, s };
+            return {
+                E: K,
+                K: E,
+                S,
+                F,
+                s
+            };
         },
         automataDos: state => {
             var E = [];
             var K = state.alfabetoDos;
-            var S = state.nodosDos[state.inicialesDos[0]].etiqueta;
+            var S = [state.nodosDos[state.inicialesDos[0]].etiqueta];
             var F = [];
             var s = [];
 
-            for (let i = 0; i < state.nodosDos.length; i++){
+            for (let i = 0; i < state.nodosDos.length; i++) {
                 const inicial = state.inicialesDos[i];
                 const final = state.finalesDos[i];
                 const nodo = state.nodosDos[i].etiqueta;
                 E.push(nodo);
-                if(final){
+                if (final) {
                     F.push(nodo);
                 }
             }
@@ -177,7 +183,13 @@ const store = new Vuex.Store({
 
                 s.push([origen, conexion, destino]);
             }
-            return { E, K, S, F, s };
+            return {
+                E: K,
+                K: E,
+                S,
+                F,
+                s
+            };
         }
     }
 });
