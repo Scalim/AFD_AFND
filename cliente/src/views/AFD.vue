@@ -32,7 +32,7 @@
           expanded
           class="button"
           :loading="cargando"
-          @click="obtenerArbol()"
+          @click="transformar()"
           >Transformar</b-button
         >
       </div>
@@ -54,7 +54,7 @@
               expanded
               class="button"
               :loading="cargando"
-              @click="obtenerArbol()"
+              @click="sobreescribir(1)"
               >Sobreescribir Autómata 1 con este resultado</b-button
             >
           </div>
@@ -67,7 +67,7 @@
               expanded
               class="button"
               :loading="cargando"
-              @click="obtenerArbol()"
+              @click="sobreescribir(1)"
               >Sobreescribir Autómata 2 con este resultado</b-button
             >
           </div>
@@ -95,10 +95,11 @@ export default {
   }),
 
   methods: {
+    sobreescribir(index) {},
     transformar() {
       this.cargando = true;
       var data;
-      if (automata == "Autómata 1") {
+      if (this.automata == "Autómata 1") {
         data = this.$store.getters.automataUno;
       } else {
         data = this.$store.getters.automataDos;

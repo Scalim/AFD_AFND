@@ -1,5 +1,8 @@
 from collections import OrderedDict
-from servicios import fecha_y_hora
+from datetime import datetime
+
+def fecha_y_hora():
+    return '--> '+str(datetime.now(tz=None).replace(microsecond=0))+': '
 
 
 class AutomataFinito:
@@ -245,6 +248,9 @@ def matriz_estados(alfabeto, nodos, finales, conexiones):
 
             if(i == j):
                 E[i][j] = -1
+            elif(es_final(i, nodos, finales) and not(es_final(j, nodos, finales))):
+                E[i][j] = 1
+                E[j][i] = 1
             j = j+1
         i = i+1
     i = 0
@@ -259,9 +265,6 @@ def matriz_estados(alfabeto, nodos, finales, conexiones):
             elif(E[i][j] == 1):
                 j = j+1
                 val = True
-            elif(es_final(i, nodos, finales) and not(es_final(j, nodos, finales))):
-                E[i][j] = 1
-                E[j][i] = 1
             else:
                 a = C[j][0]
                 b = C[i][0]
