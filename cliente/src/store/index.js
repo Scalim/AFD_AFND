@@ -136,7 +136,6 @@ const store = new Vuex.Store({
             var s = [];
 
             for (let i = 0; i < state.nodosUno.length; i++){
-                const inicial = state.inicialesUno[i];
                 const final = state.finalesUno[i];
                 const nodo = state.nodosUno[i].etiqueta;
                 E.push(nodo);
@@ -150,11 +149,7 @@ const store = new Vuex.Store({
                 const destino = state.destinosUno[i];
                 const conexion = state.conexionesUno[i];
 
-                s.push({
-                    inicio: origen,
-                    letra: conexion,
-                    final: destino,
-                });
+                s.push([origen, conexion, destino]);
             }
             return { E, K, S, F, s };
         },
@@ -180,11 +175,7 @@ const store = new Vuex.Store({
                 const destino = state.destinosDos[i];
                 const conexion = state.conexionesDos[i];
 
-                s.push({
-                    inicio: origen,
-                    letra: conexion,
-                    final: destino,
-                });
+                s.push([origen, conexion, destino]);
             }
             return { E, K, S, F, s };
         }
