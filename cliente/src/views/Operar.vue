@@ -73,10 +73,12 @@
 
       <div class="column is-6" style="border-left: 2px solid #f5f5f5; ">
         <grafo
-          :nodos="$store.state.nodos"
-          :origenes="$store.state.origenes"
-          :destinos="$store.state.destinos"
-          :pesos="$store.state.pesos"
+          :nodos="grafo.nodos"
+          :origenes="grafo.origenes"
+          :destinos="grafo.destinos"
+          :finales="grafo.finales"
+          :iniciales="grafo.iniciales"
+          :conexiones="grafo.conexiones"
         />
         <div class="columns" v-if="resultado != null">
           <div class="column is-6">
@@ -127,6 +129,15 @@ export default {
     automataX: null,
     automataY: null,
     operacion: null,
+    grafo: {
+      nodos: [],
+      origenes: [],
+      destinos: [],
+      conexiones: [],
+      alfabeto: [],
+      iniciales: [],
+      finales: []
+    },
   }),
   methods: {
     sobreescribir(automata){
@@ -154,7 +165,6 @@ export default {
         } else {
           data = [this.$store.getters.automataDos];
         }
-        console.log("DATA", data);
 
       } else if (this.operaciones.indexOf(this.operacion) == 1){
         nombre = "union";
@@ -195,13 +205,60 @@ export default {
           data = [this.$store.getters.automataDos, this.$store.getters.automataDos];
         }
       }
+      
       axios.post(`${this.$apiUrl}/operar`,{
         'operacion': nombre,
         'automatas': data
       })
       .then( r => {
-        console.log("RESULTADO: ", r.data.automata);
         this.resultado = r.data.automata;
+
+        if(r.data.automata){
+          var nodos = [];
+          var origenes = [];
+          var destinos = [];
+          var conexiones = [];
+          var alfabeto = r.data.automata.E;
+          var iniciales = [];
+          var finales = [];
+
+          for (let index = 0; index < r.data.automata.K.length; index++) {
+            var encontrado = false;
+            nodos.push({etiqueta: r.data.automata.K[index], id: index});
+            r.data.automata.F.forEach(elemento => {
+              if(elemento = r.data.automata.K[index]){
+                encontrado = true;
+              }
+            });
+            if(encontrado){
+              finales.push(true);
+            }else{
+              finales.push(false);
+            }
+            if(r.data.automata.K[index] == r.data.automata.S[0]){
+              iniciales[0] = index;
+            }
+          }
+          
+          for (let index = 0; index < r.data.automata.s.length; index++) {
+            var elemento = r.data.automata.s[0];
+            console.log("ELEMENTO: ", elemento);
+            origenes.push(elemento[0]);
+            conexiones.push(elemento[1]);
+            destinos.push(elemento[2]);
+          }
+
+          this.grafo = {
+            nodos: nodos,
+            origenes: origenes,
+            destinos: destinos,
+            conexiones: conexiones,
+            alfabeto: alfabeto,
+            iniciales: iniciales,
+            finales: finales
+          }
+          console.log("GRAFO: ", this.grafo);
+        }
       })
       .catch(e => {
         console.log(e);
