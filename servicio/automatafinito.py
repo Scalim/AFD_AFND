@@ -1,8 +1,10 @@
 from collections import OrderedDict
+from servicios import fecha_y_hora
 
 
 class AutomataFinito:
     def __init__(self, E, K, S, F, s):
+        print(fecha_y_hora()+"[automatafinito.py] __init__()")
         self.E = E  # (Σ) Alfabeto
         self.K = K  # (K) Nodos
         self.S = S  # (S) Iniciales
@@ -10,21 +12,27 @@ class AutomataFinito:
         self.s = s  # (δ) Conexiones
 
     def nodos_string(self):
+        print(fecha_y_hora()+"[automatafinito.py] nodos_string()")
         return "K = {" + ", ".join(self.K) + "}"
 
     def alfabeto_string(self):
+        print(fecha_y_hora()+"[automatafinito.py] alfabeto_string()")
         return "Σ = {" + ", ".join(self.E) + "}"
 
     def iniciales_string(self):
+        print(fecha_y_hora()+"[automatafinito.py] iniciales_string()")
         return "S = {" + ", ".join(self.S) + "}"
 
     def finales_string(self):
+        print(fecha_y_hora()+"[automatafinito.py] finales_string()")
         return "F = {" + ", ".join(self.F) + "}"
 
     def conexiones_string(self):
+        print(fecha_y_hora()+"[automatafinito.py] conexiones_string()")
         return "δ = {" + str(self.s) + "}"
 
     def mostrar_quintupla(self):
+        print(fecha_y_hora()+"[automatafinito.py] mostrar_quintupla()")
         print(self.nodos_string())
         print(self.alfabeto_string())
         print(self.iniciales_string())
@@ -32,6 +40,7 @@ class AutomataFinito:
         print(self.conexiones_string())
 
     def convertir_diccionario(self):
+        print(fecha_y_hora()+"[automatafinito.py] convertir_diccionario()")
         return {
             "K": self.K,
             "E": self.E,
@@ -41,6 +50,7 @@ class AutomataFinito:
         }
 
     def es_afnd(self):
+        print(fecha_y_hora()+"[automatafinito.py] es_afnd()")
         for conexion in self.s:
             if (conexion[1] == None):
                 # Si la letra de esa arista es vacío
@@ -48,6 +58,7 @@ class AutomataFinito:
         return False
 
     def obtener_afd(self):
+        print(fecha_y_hora()+"[automatafinito.py] obtener_afd()")
         nodos, inicio, finales, conexiones = transformacion(
             self.E, self.K, self.S, self.F, self.s)
         self.K = nodos
@@ -59,7 +70,7 @@ class AutomataFinito:
         # Lógica de conversión
 
     def simplificar_afd(self):
-        print("Simplificar autómata")
+        print(fecha_y_hora()+"[automatafinito.py] simplificar_afd()")
         M = matriz_estados(self.E, self.K, self.F, self.s)
         I, A, D = enlaces(self.s)
         i = 0
@@ -85,6 +96,7 @@ class AutomataFinito:
         # Lógica de simplificación
 
     def union(self, automata1):
+        print(fecha_y_hora()+"[automatafinito.py] union()")
         E = self.E.copy()
         K = self.K.copy()
         F = self.F.copy()
@@ -104,6 +116,7 @@ class AutomataFinito:
         return AutomataFinito(E, K, S, F, s)
 
     def complemento(self):
+        print(fecha_y_hora()+"[automatafinito.py] complemento()")
         if (not self.es_afnd()):
             # Es una propiedad sólo de AFD
             F = []
@@ -121,6 +134,7 @@ class AutomataFinito:
             return "El autómata debe ser AFD"
 
     def concatenacion(self, automata1):
+        print(fecha_y_hora()+"[automatafinito.py] concatenacion()")
         E = self.E + list(set(automata1.E) - set(self.E))
         K = self.K.copy() + automata1.K.copy()
         F = automata1.F.copy()
@@ -133,6 +147,7 @@ class AutomataFinito:
         return AutomataFinito(E, K, S, F, s)
 
     def interseccion(self, automata1):
+        print(fecha_y_hora()+"[automatafinito.py] interseccion()")
         # ~(~A1 U ~A2)
         if (not self.es_afnd() and not automata1.es_afnd()):
             A1_complemento = self.complemento()
@@ -148,7 +163,7 @@ class AutomataFinito:
             return "Ambos autómatas deben ser AFD"
 
     def operar(self, operacion, automata1):
-        print("Obtener autómata a partir de una operación")
+        print(fecha_y_hora()+"[automatafinito.py] operar(): Obtener autómata a partir de una operación")
         if (operacion == "complemento"):
             return self.complemento()
         elif (operacion == "interseccion"):
@@ -160,6 +175,7 @@ class AutomataFinito:
 
 
 def buscar_id(variable, lista):
+    print(fecha_y_hora()+"[automatafinito.py] buscar_id()")
     cont = 0
     for i in lista:
         if(i == variable):
@@ -168,6 +184,7 @@ def buscar_id(variable, lista):
 
 
 def matriz(alfabeto, nodos):
+    print(fecha_y_hora()+"[automatafinito.py] matriz()")
     matriz = []
     cont = 0
     for i in alfabeto:
@@ -178,6 +195,7 @@ def matriz(alfabeto, nodos):
 
 
 def enlaces(conexiones):
+    print(fecha_y_hora()+"[automatafinito.py] enlaces()")
     nd_inic = []
     alf_con = []
     nd_dest = []
@@ -197,6 +215,7 @@ def enlaces(conexiones):
 
 
 def llenar_matriz_c(nodos, alfabeto, conexiones):
+    print(fecha_y_hora()+"[automatafinito.py] llenar_matriz_c()")
     M = matriz(alfabeto, nodos)
     I, A, D = enlaces(conexiones)
     n = 0
@@ -207,6 +226,7 @@ def llenar_matriz_c(nodos, alfabeto, conexiones):
 
 
 def es_final(nodo, nodos, finales):
+    print(fecha_y_hora()+"[automatafinito.py] es_final()")
     for i in finales:
         if(i == nodos[nodo]):
             return True
@@ -214,6 +234,7 @@ def es_final(nodo, nodos, finales):
 
 
 def matriz_estados(alfabeto, nodos, finales, conexiones):
+    print(fecha_y_hora()+"[automatafinito.py] matriz_estados()")
     C = llenar_matriz_c(nodos, alfabeto, conexiones)
     E = matriz(nodos, nodos)
     i = 0
@@ -260,6 +281,7 @@ def matriz_estados(alfabeto, nodos, finales, conexiones):
 
 
 def reapuntar(mantener, borrar, destinos):
+    print(fecha_y_hora()+"[automatafinito.py] reapuntar()")
     indice = 0
     for i in destinos:
         if(i == borrar):
@@ -268,6 +290,7 @@ def reapuntar(mantener, borrar, destinos):
 
 
 def borracion(borrar, partidas, caminos, destinos):
+    print(fecha_y_hora()+"[automatafinito.py] borracion()")
     i = 0
     while(i < len(partidas)):
         val = False
@@ -281,6 +304,7 @@ def borracion(borrar, partidas, caminos, destinos):
 
 
 def delete(partidas, nodos):
+    print(fecha_y_hora()+"[automatafinito.py] delete()")
     i = 0
     while(i < len(nodos)):
         val = False
@@ -293,6 +317,7 @@ def delete(partidas, nodos):
 
 
 def decod(partidas, caminos, destinos):
+    print(fecha_y_hora()+"[automatafinito.py] decod()")
     lista = []
     i = 0
     while(i < len(partidas)):
@@ -303,6 +328,7 @@ def decod(partidas, caminos, destinos):
 
 
 def matE_AFND(alfabeto, nodos):
+    print(fecha_y_hora()+"[automatafinito.py] matE_AFND()")
     matriz = []
     cont = 0
     for i in alfabeto:
@@ -320,6 +346,7 @@ def matE_AFND(alfabeto, nodos):
 
 
 def conx_void(nodo, partidas, caminos):
+    print(fecha_y_hora()+"[automatafinito.py] conx_void()")
     i = 0
     cont = 0
     while(i < len(partidas)):
@@ -331,6 +358,7 @@ def conx_void(nodo, partidas, caminos):
 
 
 def caminos_void(nodo, partidas, caminos, destinos):
+    print(fecha_y_hora()+"[automatafinito.py] caminos_void()")
     i = 0
     lista = []
     while(i < len(partidas)):
@@ -341,6 +369,7 @@ def caminos_void(nodo, partidas, caminos, destinos):
 
 
 def buscar_destino(nodo, camino, partidas, caminos, destinos):
+    print(fecha_y_hora()+"[automatafinito.py] buscar_destino()")
     i = 0
     while(i < len(partidas)):
         if(partidas[i] == nodo and caminos[i] == camino):
@@ -350,6 +379,7 @@ def buscar_destino(nodo, camino, partidas, caminos, destinos):
 
 
 def buscar_conxVoid(nodo, camino, partidas, caminos, destinos):
+    print(fecha_y_hora()+"[automatafinito.py] buscar_conxVoid()")
     cant = 0
     V = caminos_void(nodo, partidas, caminos, destinos)
     cantidadV = len(V)
@@ -366,6 +396,7 @@ def buscar_conxVoid(nodo, camino, partidas, caminos, destinos):
 
 
 def dest_to_list(estacosa):
+    print(fecha_y_hora()+"[automatafinito.py] dest_to_list()")
     i = 0
     lista = []
     aux = ""
@@ -384,6 +415,7 @@ def dest_to_list(estacosa):
 
 
 def llenar_matCAFND(nodos, alfabeto, conexiones):
+    print(fecha_y_hora()+"[automatafinito.py] llenar_matCAFND()")
     M = matE_AFND(alfabeto, nodos)
     I, A, D = enlaces(conexiones)
     n = 0
@@ -415,7 +447,8 @@ def llenar_matCAFND(nodos, alfabeto, conexiones):
     return M
 
 
-def unionNodos(unir):
+def union_nodos(unir):
+    print(fecha_y_hora()+"[automatafinito.py] union_nodos()")
     aux = ""
     for i in unir:
         aux += i
@@ -423,6 +456,7 @@ def unionNodos(unir):
 
 
 def separar(nodo, nodos):
+    print(fecha_y_hora()+"[automatafinito.py] separar()")
     aux = ""
     lista = []
     i = 0
@@ -436,10 +470,12 @@ def separar(nodo, nodos):
 
 
 def cant_destinos(id_nodo, matriz, camino):
+    print(fecha_y_hora()+"[automatafinito.py] cant_destinos()")
     return len(matriz[id_nodo][camino])
 
 
 def separar_caminos(conexion, nodos, guia, conexiones):
+    print(fecha_y_hora()+"[automatafinito.py] separar_caminos()")
     Nnodos = []
     auxP = []
     auxC = []
@@ -477,6 +513,7 @@ def separar_caminos(conexion, nodos, guia, conexiones):
 
 
 def transformacion(alfabeto, nodos, iniciales, finales, conexiones):
+    print(fecha_y_hora()+"[automatafinito.py] transformacion()")
     i = 0
     guia = 1
     while(i < len(conexiones)):
@@ -496,14 +533,14 @@ def transformacion(alfabeto, nodos, iniciales, finales, conexiones):
     AUX = caminos_void(iniciales[0], P, C, D)
     for i in AUX:
         iniciales.append(i)
-    inicialAFD.append(unionNodos(iniciales))
-    nodosAFD.append(unionNodos(iniciales))
+    inicialAFD.append(union_nodos(iniciales))
+    nodosAFD.append(union_nodos(iniciales))
     i = 0
     while(i < len(nodos)):
         j = 0
         while(j < len(alfabeto)):
-            if((unionNodos(M[i][j]) not in nodosAFD) and (unionNodos(M[i][j]) != "")):
-                nodosAFD.append(unionNodos(M[i][j]))
+            if((union_nodos(M[i][j]) not in nodosAFD) and (union_nodos(M[i][j]) != "")):
+                nodosAFD.append(union_nodos(M[i][j]))
             j += 1
         i += 1
     i = 0
