@@ -148,13 +148,17 @@ export default {
 
       if(this.operaciones.indexOf(this.operacion) == 0){
         nombre = "complemento";
+
         if(this.automatas.indexOf(this.automataX) == 0){
           data = [this.$store.getters.automataUno];
         } else {
           data = [this.$store.getters.automataDos];
         }
+        console.log("DATA", data);
+
       } else if (this.operaciones.indexOf(this.operacion) == 1){
         nombre = "union";
+
         if(this.automatas.indexOf(this.automataX) == 0 && this.automatas.indexOf(this.automataY) == 0){
           data = [this.$store.getters.automataUno, this.$store.getters.automataUno];
         } else if(this.automatas.indexOf(this.automataX) == 0 && this.automatas.indexOf(this.automataY) == 1){
@@ -164,8 +168,10 @@ export default {
         } else {
           data = [this.$store.getters.automataDos, this.$store.getters.automataDos];
         }
+
       } else if (this.operaciones.indexOf(this.operacion) == 2){
         nombre = "concatenacion";
+
         if(this.automatas.indexOf(this.automataX) == 0 && this.automatas.indexOf(this.automataY) == 0){
           data = [this.$store.getters.automataUno, this.$store.getters.automataUno];
         } else if(this.automatas.indexOf(this.automataX) == 0 && this.automatas.indexOf(this.automataY) == 1){
@@ -175,8 +181,10 @@ export default {
         } else {
           data = [this.$store.getters.automataDos, this.$store.getters.automataDos];
         }
+
       } else {
         nombre = "interseccion";
+        
         if(this.automatas.indexOf(this.automataX) == 0 && this.automatas.indexOf(this.automataY) == 0){
           data = [this.$store.getters.automataUno, this.$store.getters.automataUno];
         } else if(this.automatas.indexOf(this.automataX) == 0 && this.automatas.indexOf(this.automataY) == 1){
@@ -192,8 +200,8 @@ export default {
         'automatas': data
       })
       .then( r => {
-        console.log("RESULTADO: ", r.data);
-        this.resultado = r.data;
+        console.log("RESULTADO: ", r.data.automata);
+        this.resultado = r.data.automata;
       })
       .catch(e => {
         console.log(e);
