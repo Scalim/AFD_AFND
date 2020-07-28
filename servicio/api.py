@@ -3,13 +3,10 @@ from flask_cors import CORS, cross_origin
 from servicios import fecha_y_hora, simplificar, operar, transformar
 from automatafinito import fecha_y_hora
 
+
 application = Flask(__name__)
-cors = CORS(application, resources={r"/foo": {"origins": "*"}})
+cors = CORS(application, resources={r"/foo": {"origins": ["http://localhost:8080", "http://localhost:8081"]}})
 application.config['CORS_HEADERS'] = 'Content-Type'
-application.config.update(
-    WTF_CSRF_ENABLED=True,
-    SECRET_KEY='amo-los-grafos'
-)
 
 
 @application.route('/', methods=['GET'])
