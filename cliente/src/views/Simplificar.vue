@@ -7,8 +7,8 @@
 
         <p v-if="eraAfd != null" style="padding: 20px 0 20px 0;">
           {{
-            `El autómata ${eraAfd ? "NO" : "ya"} era AFD ${
-              eraAfd
+            `El autómata ${eraAfd ? "ya" : "NO"} era AFD ${
+              !eraAfd
                 ? "y se transformó correctamente"
                 : "por lo que no se transformó"
             }`
@@ -98,7 +98,6 @@ import axios from "axios";
 import Grafo from "../components/Grafo.vue";
 
 export default {
-  name: "MatrizCaminos",
   components: {
     Grafo,
   },
@@ -108,7 +107,6 @@ export default {
     automatas: ["Autómata 1", "Autómata 2"],
     eraAfd: null,
   }),
-
   methods: {
     sobreescribir(index) {
       if (index == 1) {

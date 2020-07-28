@@ -32,7 +32,7 @@
 <script>
 export default {
   name: "Extremos",
-  props: ["nodos", "finales", "iniciales"],
+  props: ["nodos", "finales", "iniciales", "indiceInicio"],
   data() {
     return {
       cantidad: 0,
@@ -82,7 +82,9 @@ export default {
     },
     cantidad: function() {
       if (this.cantidad > this.nodos.length) {
-        this.nodos.push(`Q${this.nodos.length + 1}`);
+        this.nodos.push(
+          `${this.indiceInicio == 1 ? "Q" : "P"}${this.nodos.length + 1}`
+        );
         this.finalesBoleanos.push(false);
       } else if (this.cantidad < this.nodos.length) {
         this.nodos.pop();

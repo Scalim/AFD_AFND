@@ -31,6 +31,7 @@
           :nodos="nodos"
           :finales="finales"
           :iniciales="iniciales"
+          :indiceInicio="indiceInicio"
         ></extremos>
       </b-step-item>
 
@@ -98,10 +99,12 @@ export default {
   name: "StepperData",
   props: [
     "conexiones",
+
     "finales",
     "iniciales",
     "nodos",
     "alfabeto",
+    "indiceInicio",
     "onFinalizar",
   ],
   components: {

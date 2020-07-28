@@ -6,7 +6,18 @@
         <span class="subtitle"
           >Complemento, unión, concatenación e intersección</span
         >
-        <b-field expanded label="Operación" style="margin-top: 10px;">
+        <p
+          v-if="eraAfd != null || error != null"
+          style="padding: 20px 0 20px 0;"
+        >
+          {{
+            error != null
+              ? error
+              : `El autómata ${eraAfd ? "ya" : "NO"} era AFD`
+          }}
+        </p>
+
+        <b-field expanded label="Operación" style="margin-top: 20px;">
           <b-select
             expanded
             placeholder="Selecciona una operación"
@@ -66,19 +77,17 @@
           expanded
           class="button"
           :loading="cargando"
-          @click="obtenerArbol()"
+          @click="obtener()"
           >Operar</b-button
         >
       </div>
 
-      <div class="column is-6" style="border-left: 2px solid #f5f5f5; ">
-        <grafo
-          :nodos="$store.state.nodos"
-          :origenes="$store.state.origenes"
-          :destinos="$store.state.destinos"
-          :pesos="$store.state.pesos"
-        />
-        <div class="columns" v-if="resultado != null">
+      <div
+        class="column is-6"
+        style="border-left: 2px solid #f5f5f5;"
+        v-if="resultado != null"
+      >
+        <div class="columns">
           <div class="column is-6">
             <b-button
               style="margin-top: 20px;"
@@ -88,8 +97,8 @@
               expanded
               class="button"
               :loading="cargando"
-              @click="obtenerArbol()"
-              >Sobreescribir Autómata 1 con este resultado</b-button
+              @click="sobreescribir(1)"
+              >Sobreescribir Autómata 1</b-button
             >
           </div>
           <div class="column is-6">
@@ -101,11 +110,12 @@
               expanded
               class="button"
               :loading="cargando"
-              @click="obtenerArbol()"
-              >Sobreescribir Autómata 2 con este resultado</b-button
+              @click="sobreescribir(2)"
+              >Sobreescribir Autómata 2</b-button
             >
           </div>
         </div>
+        <grafo :quintupla="resultado" />
       </div>
     </div>
   </div>
@@ -116,7 +126,6 @@ import axios from "axios";
 import Grafo from "../components/Grafo.vue";
 
 export default {
-  name: "MatrizCaminos",
   components: {
     Grafo,
   },
@@ -128,8 +137,147 @@ export default {
     automataX: null,
     automataY: null,
     operacion: null,
+    eraAfd: null,
+    error: null,
   }),
+  methods: {
+    sobreescribir(index) {
+      if (index == 1) {
+        this.$store.commit("crearAutomataUno", this.resultado);
+      }
+      if (index == 2) {
+        this.$store.commit("crearAutomataDos", this.resultado);
+      }
+    },
+    obtener() {
+      var automataUno;
+      var automataDos;
+      var nombre;
+      var data;
 
-  methods: {},
+      if (this.operaciones.indexOf(this.operacion) == 0) {
+        nombre = "complemento";
+
+        if (this.automatas.indexOf(this.automataX) == 0) {
+          data = [this.$store.getters.automataUno];
+        } else {
+          data = [this.$store.getters.automataDos];
+        }
+      } else if (this.operaciones.indexOf(this.operacion) == 1) {
+        nombre = "union";
+
+        if (
+          this.automatas.indexOf(this.automataX) == 0 &&
+          this.automatas.indexOf(this.automataY) == 0
+        ) {
+          data = [
+            this.$store.getters.automataUno,
+            this.$store.getters.automataUno,
+          ];
+        } else if (
+          this.automatas.indexOf(this.automataX) == 0 &&
+          this.automatas.indexOf(this.automataY) == 1
+        ) {
+          data = [
+            this.$store.getters.automataUno,
+            this.$store.getters.automataDos,
+          ];
+        } else if (
+          this.automatas.indexOf(this.automataX) == 1 &&
+          this.automatas.indexOf(this.automataY) == 0
+        ) {
+          data = [
+            this.$store.getters.automataDos,
+            this.$store.getters.automataUno,
+          ];
+        } else {
+          data = [
+            this.$store.getters.automataDos,
+            this.$store.getters.automataDos,
+          ];
+        }
+      } else if (this.operaciones.indexOf(this.operacion) == 2) {
+        nombre = "concatenacion";
+
+        if (
+          this.automatas.indexOf(this.automataX) == 0 &&
+          this.automatas.indexOf(this.automataY) == 0
+        ) {
+          data = [
+            this.$store.getters.automataUno,
+            this.$store.getters.automataUno,
+          ];
+        } else if (
+          this.automatas.indexOf(this.automataX) == 0 &&
+          this.automatas.indexOf(this.automataY) == 1
+        ) {
+          data = [
+            this.$store.getters.automataUno,
+            this.$store.getters.automataDos,
+          ];
+        } else if (
+          this.automatas.indexOf(this.automataX) == 1 &&
+          this.automatas.indexOf(this.automataY) == 0
+        ) {
+          data = [
+            this.$store.getters.automataDos,
+            this.$store.getters.automataUno,
+          ];
+        } else {
+          data = [
+            this.$store.getters.automataDos,
+            this.$store.getters.automataDos,
+          ];
+        }
+      } else {
+        nombre = "interseccion";
+
+        if (
+          this.automatas.indexOf(this.automataX) == 0 &&
+          this.automatas.indexOf(this.automataY) == 0
+        ) {
+          data = [
+            this.$store.getters.automataUno,
+            this.$store.getters.automataUno,
+          ];
+        } else if (
+          this.automatas.indexOf(this.automataX) == 0 &&
+          this.automatas.indexOf(this.automataY) == 1
+        ) {
+          data = [
+            this.$store.getters.automataUno,
+            this.$store.getters.automataDos,
+          ];
+        } else if (
+          this.automatas.indexOf(this.automataX) == 1 &&
+          this.automatas.indexOf(this.automataY) == 0
+        ) {
+          data = [
+            this.$store.getters.automataDos,
+            this.$store.getters.automataUno,
+          ];
+        } else {
+          data = [
+            this.$store.getters.automataDos,
+            this.$store.getters.automataDos,
+          ];
+        }
+      }
+
+      axios
+        .post(`${this.$apiUrl}/operar`, {
+          operacion: nombre,
+          automatas: data,
+        })
+        .then((r) => {
+          this.resultado = r.data.automata;
+          this.eraAfd = r.data.eraAfd;
+          this.error = r.data.error;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+  },
 };
 </script>

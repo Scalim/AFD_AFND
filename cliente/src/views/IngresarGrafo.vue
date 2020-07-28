@@ -13,6 +13,7 @@
               :alfabeto="alfabeto"
               :iniciales="iniciales"
               :finales="finales"
+              :indiceInicio="grafoSeleccionado"
               :onFinalizar="onFinalizar"
             />
           </div>
