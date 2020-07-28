@@ -1,10 +1,15 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
 from servicios import fecha_y_hora, simplificar, operar, transformar
+from automatafinito import fecha_y_hora
 
 application = Flask(__name__)
 cors = CORS(application, resources={r"/foo": {"origins": "*"}})
 application.config['CORS_HEADERS'] = 'Content-Type'
+application.config.update(
+    WTF_CSRF_ENABLED = True,
+    SECRET_KEY = 'amo-los-grafos'
+)
 
 @application.route('/', methods=['GET'])
 @cross_origin(origin='*')
