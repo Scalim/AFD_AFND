@@ -6,33 +6,33 @@ def fecha_y_hora():
 
 
 class AutomataFinito:
-    def __init__(self, E, K, S, F, s):
+    def __init__(self, e, k, s, f, c):
         print(fecha_y_hora()+"[automatafinito.py] __init__()")
-        self.E = E  # (Σ) Alfabeto
-        self.K = K  # (K) Nodos
-        self.S = S  # (S) Iniciales
-        self.F = F  # (F) Finales
-        self.s = s  # (δ) Conexiones
+        self.e = e  # (Σ) Alfabeto
+        self.k = k  # (K) Nodos
+        self.s = s  # (S) Iniciales
+        self.f = f  # (F) Finales
+        self.c = c  # (δ) Conexiones
 
     def nodos_string(self):
         print(fecha_y_hora()+"[automatafinito.py] nodos_string()")
-        return "K = {" + ", ".join(self.K) + "}"
+        return "K = {" + ", ".join(self.k) + "}"
 
     def alfabeto_string(self):
         print(fecha_y_hora()+"[automatafinito.py] alfabeto_string()")
-        return "Σ = {" + ", ".join(self.E) + "}"
+        return "Σ = {" + ", ".join(self.e) + "}"
 
     def iniciales_string(self):
         print(fecha_y_hora()+"[automatafinito.py] iniciales_string()")
-        return "S = {" + ", ".join(self.S) + "}"
+        return "S = {" + ", ".join(self.s) + "}"
 
     def finales_string(self):
         print(fecha_y_hora()+"[automatafinito.py] finales_string()")
-        return "F = {" + ", ".join(self.F) + "}"
+        return "F = {" + ", ".join(self.f) + "}"
 
     def conexiones_string(self):
         print(fecha_y_hora()+"[automatafinito.py] conexiones_string()")
-        return "δ = {" + str(self.s) + "}"
+        return "δ = {" + str(self.c) + "}"
 
     def mostrar_quintupla(self):
         print(fecha_y_hora()+"[automatafinito.py] mostrar_quintupla()")
@@ -45,16 +45,16 @@ class AutomataFinito:
     def convertir_diccionario(self):
         print(fecha_y_hora()+"[automatafinito.py] convertir_diccionario()")
         return {
-            "K": self.K,
-            "E": self.E,
-            "S": self.S,
-            "F": self.F,
-            "s": self.s
+            "K": self.k,
+            "E": self.e,
+            "S": self.s,
+            "F": self.f,
+            "s": self.c
         }
 
     def es_afnd(self):
         print(fecha_y_hora()+"[automatafinito.py] es_afnd()")
-        for conexion in self.s:
+        for conexion in self.c:
             if (conexion[1] == None):
                 # Si la letra de esa arista es vacío
                 return True
@@ -63,91 +63,91 @@ class AutomataFinito:
     def obtener_afd(self):
         print(fecha_y_hora()+"[automatafinito.py] obtener_afd()")
         nodos, inicio, finales, conexiones = transformacion(
-            self.E, self.K, self.S, self.F, self.s)
-        self.K = nodos
-        self.S = inicio
-        self.F = finales
-        self.s = conexiones
-        return AutomataFinito(self.E, nodos, inicio, finales, conexiones)
+            self.e, self.k, self.s, self.f, self.c)
+        self.k = nodos
+        self.s = inicio
+        self.f = finales
+        self.c = conexiones
+        return AutomataFinito(self.e, nodos, inicio, finales, conexiones)
 
         # Lógica de conversión
 
     def simplificar_afd(self):
         print(fecha_y_hora()+"[automatafinito.py] simplificar_afd()")
-        M = matriz_estados(self.E, self.K, self.F, self.s)
-        I, A, D = enlaces(self.s)
+        M = matriz_estados(self.e, self.k, self.f, self.c)
+        I, A, D = enlaces(self.c)
         i = 0
         j = 0
-        while(i < len(self.K)):
+        while(i < len(self.k)):
             j = 0
-            while(j < len(self.K)):
+            while(j < len(self.k)):
                 if(M[i][j] == 0):
-                    if(self.K[i] in self.S):
-                        reapuntar(self.K[i], self.K[j], D)
-                        borracion(self.K[j], I, A, D)
+                    if(self.k[i] in self.s):
+                        reapuntar(self.k[i], self.k[j], D)
+                        borracion(self.k[j], I, A, D)
                     else:
-                        reapuntar(self.K[j], self.K[i], D)
-                        borracion(self.K[i], I, A, D)
+                        reapuntar(self.k[j], self.k[i], D)
+                        borracion(self.k[i], I, A, D)
                     M[i][j] = 1
                     M[j][i] = 1
                 j = j+1
             i = i+1
-        self.K = delete(I, self.K)
-        self.F = delete(I, self.F)
-        self.s = decod(I, A, D)
+        self.k = delete(I, self.k)
+        self.f = delete(I, self.f)
+        self.c = decod(I, A, D)
         return self
         # Lógica de simplificación
 
     def union(self, automata1):
         print(fecha_y_hora()+"[automatafinito.py] union()")
-        E = self.E.copy()
-        K = self.K.copy()
-        F = self.F.copy()
-        s = self.s.copy()
+        e = self.e.copy()
+        k = self.k.copy()
+        f = self.f.copy()
+        c = self.c.copy()
 
-        E = E + list(set(automata1.E) - set(E))
-        K += automata1.K + ["Q0"]
-        F += automata1.F
-        s += automata1.s
+        e = e + list(set(automata1.e) - set(e))
+        k += automata1.k + ["Q0"]
+        f += automata1.f
+        c += automata1.c
 
-        S = ["Q0"]
-        s.append(("Q0", None, self.S[0]))
-        s.append(("Q0", None, automata1.S[0]))
+        s = ["Q0"]
+        c.append(("Q0", None, self.s[0]))
+        c.append(("Q0", None, automata1.s[0]))
 
         print("Unión entre dos autómatas")
         # Lógica de la unión
-        return AutomataFinito(E, K, S, F, s)
+        return AutomataFinito(e, k, s, f, c)
 
     def complemento(self):
         print(fecha_y_hora()+"[automatafinito.py] complemento()")
         if (not self.es_afnd()):
             # Es una propiedad sólo de AFD
-            F = []
-            K = self.K.copy()
-            KsinInicial = self.K.copy()
-            KsinInicial.remove(self.S[0])
-            for nodo in KsinInicial:
-                if (nodo not in self.F):
+            f = []
+            k = self.k.copy()
+            k_sin_inicial = self.k.copy()
+            k_sin_inicial.remove(self.s[0])
+            for nodo in k_sin_inicial:
+                if (nodo not in self.f):
                     # Si el nodo no está en los finales del autómata
-                    F.append(nodo)
+                    f.append(nodo)
 
-            return AutomataFinito(self.E, K, self.S, F, self.s)
+            return AutomataFinito(self.e, k, self.s, f, self.c)
         else:
             print("El autómata debe ser AFD")
             return "El autómata debe ser AFD"
 
     def concatenacion(self, automata1):
         print(fecha_y_hora()+"[automatafinito.py] concatenacion()")
-        E = self.E + list(set(automata1.E) - set(self.E))
-        K = self.K.copy() + automata1.K.copy()
-        F = automata1.F.copy()
-        s = self.s.copy() + automata1.s.copy()
-        S = self.S
+        e = self.e + list(set(automata1.e) - set(self.e))
+        k = self.k.copy() + automata1.k.copy()
+        f = automata1.f.copy()
+        c = self.c.copy() + automata1.c.copy()
+        s = self.s
 
-        for final in self.F:
-            s.append((final, None, automata1.S))
+        for final in self.f:
+            c.append((final, None, automata1.s))
 
-        return AutomataFinito(E, K, S, F, s)
+        return AutomataFinito(e, k, s, f, c)
 
     def interseccion(self, automata1):
         print(fecha_y_hora()+"[automatafinito.py] interseccion()")
@@ -239,7 +239,7 @@ def es_final(nodo, nodos, finales):
 def matriz_estados(alfabeto, nodos, finales, conexiones):
     print(fecha_y_hora()+"[automatafinito.py] matriz_estados()")
     C = llenar_matriz_c(nodos, alfabeto, conexiones)
-    E = matriz(nodos, nodos)
+    e = matriz(nodos, nodos)
     i = 0
     j = 0
     while(i < len(nodos)):
@@ -247,10 +247,10 @@ def matriz_estados(alfabeto, nodos, finales, conexiones):
         while(j < len(nodos)):
 
             if(i == j):
-                E[i][j] = -1
+                e[i][j] = -1
             elif(es_final(i, nodos, finales) and not(es_final(j, nodos, finales))):
-                E[i][j] = 1
-                E[j][i] = 1
+                e[i][j] = 1
+                e[j][i] = 1
             j = j+1
         i = i+1
     i = 0
@@ -262,25 +262,25 @@ def matriz_estados(alfabeto, nodos, finales, conexiones):
             if(j == i):
                 j = j+1
                 val = True
-            elif(E[i][j] == 1):
+            elif(e[i][j] == 1):
                 j = j+1
                 val = True
             else:
                 a = C[j][0]
                 b = C[i][0]
-                if(E[buscar_id(a, nodos)][buscar_id(b, nodos)] == 1):
-                    E[i][j] = 1
-                    E[j][i] = 1
+                if(e[buscar_id(a, nodos)][buscar_id(b, nodos)] == 1):
+                    e[i][j] = 1
+                    e[j][i] = 1
                 else:
                     a = C[j][1]
                     b = C[i][1]
-                    if(E[buscar_id(a, nodos)][buscar_id(b, nodos)] == 1):
-                        E[i][j] = 1
-                        E[j][i] = 1
+                    if(e[buscar_id(a, nodos)][buscar_id(b, nodos)] == 1):
+                        e[i][j] = 1
+                        e[j][i] = 1
             if(not val):
                 j = j+1
         i = i+1
-    return E
+    return e
 
 
 def reapuntar(mantener, borrar, destinos):
@@ -352,9 +352,8 @@ def conx_void(nodo, partidas, caminos):
     print(fecha_y_hora()+"[automatafinito.py] conx_void()")
     i = 0
     while(i < len(partidas)):
-        if(partidas[i] == nodo):
-            if(caminos[i] == None):
-                return True
+        if(partidas[i] == nodo and caminos[i] == None):
+            return True
         
         i += 1
     return False
